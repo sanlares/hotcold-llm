@@ -281,7 +281,7 @@ def test_manifest_records_versions(tmp_path):
     write_manifest(tmp_path, {"model": "anthropic:claude-haiku-5-5", "persona": "demographic"})
     m = json.loads((tmp_path / "manifest.json").read_text())
     assert len(m) == 2  # a resumed run keeps the earlier entry
-    for k in ("code_sha256", "libraries", "data", "system_template", "debrief_screen", "model_settings", "python"):
+    for k in ("code_sha256", "libraries", "data", "system_template", "debrief_screen", "request_settings", "python"):
         assert m[-1][k], k
     assert m[-1]["libraries"]["langchain"] and len(m[-1]["data"]["qsf"]["sha256"]) == 64
 
@@ -307,3 +307,70 @@ def test_input_audit_catches_planted_problems(m, personas):
 def test_analysis_reproduces_paper_table2():
     from hotcold.analysis import validate
     assert validate() == []
+
+
+# --- after the independent review ---------------------------------------------------------------------------------
+def test_anthropic_cache_writes_are_counted():
+    from hotcold.llm import _usage, cost_usd
+    # what langchain-anthropic 1.7 returns: writes under ephemeral_5m_input_tokens, cache_creation set to 0
+    u = _usage({"input_tokens": 1000, "output_tokens": 10,
+                "input_token_details": {"cache_read": 600, "cache_creation": 0, "ephemeral_5m_input_tokens": 300}})
+    assert u == {"input_tokens": 100, "cache_creation_input_tokens": 300, "cache_read_input_tokens": 600, "output_tokens": 10}
+    assert cost_usd("anthropic:claude-haiku-5-5", u) > cost_usd("anthropic:claude-haiku-5-5", {**u, "cache_creation_input_tokens": 0, "input_tokens": 400})
+
+
+def test_debrief_failure_keeps_a_completed_session(m, personas):
+    class FailsLast(ScriptedModel):
+        async def respond(self, system, messages, schema):
+            if "how_decided" in schema["properties"]:
+                return None, {"stop_reason": "length", "text": "", "usage": {}}
+            return await super().respond(system, messages, schema)
+    s, res = run(first(personas, "Cold"), m, FailsLast())
+    assert res.completed and res.drop_stage is None and res.debrief_error and not res.debrief
+
+
+def test_cut_last_line_is_repaired_on_resume(personas, tmp_path):
+    from hotcold.run import done_ids
+    _run_agents(personas[:3], lambda: ScriptedModel(), tmp_path)
+    with (tmp_path / "results.jsonl").open("a") as f:
+        f.write('{"agent_id": "baseline_99", "rou')  # process killed while writing
+    assert len(done_ids(tmp_path)) == 3
+    st = _run_agents(personas[:4], lambda: ScriptedModel(), tmp_path)
+    assert st.done == 1 and len(done_ids(tmp_path)) == 4
+
+
+def test_batch_limit_is_shared_between_runs(personas, tmp_path):
+    from hotcold.batch import run_batch
+    from hotcold.run import Budget
+    active = {"now": 0, "max": 0}
+
+    class Counting(ScriptedModel):
+        async def respond(self, *a):
+            active["now"] += 1
+            active["max"] = max(active["max"], active["now"])
+            await asyncio.sleep(0.001)
+            active["now"] -= 1
+            return await super().respond(*a)
+
+    combos = [{"name": f"r{i}", "personas": personas[i * 4:(i + 1) * 4], "outdir": tmp_path / f"r{i}",
+               "make_model": lambda: Counting(), "cfg": {"dry_run": False, "model": "deepinfra:x", "explain": False}}
+              for i in range(3)]
+    out = asyncio.run(run_batch(combos, {"deepinfra": 2}, Budget(), tmp_path))
+    assert active["max"] == 2 and len(out) == 3
+
+
+def test_analysis_uses_completed_agents_and_paired_humans(personas, tmp_path):
+    from hotcold.analysis import load_runs, with_paired_humans, humans
+    from hotcold.personas import demographic_personas
+    from hotcold.run import prepare_run, save
+    ps = demographic_personas(personas[:8])
+    out = tmp_path / "run"
+    prepare_run(out, {"model": "scripted", "persona": "demographic"}, ps)
+    _run_agents(ps[:4], lambda: ScriptedModel(), out)
+    _run_agents(ps[4:], lambda: ScriptedModel(raise_at=(5, ConnectionError("x"))), out)  # cut in round ~3
+    save(out, ps)
+    panel, subjects = load_runs([out])
+    assert set(panel.agent_id) == {p.agent_id for p in ps[:4]}  # incomplete agents do not enter
+    allp = with_paired_humans(humans(), panel)
+    paired = allp[allp.source.str.endswith("paired humans")]
+    assert set(paired.real_id) == {p.real_id for p in ps[:4]} and paired.reci.notna().any()

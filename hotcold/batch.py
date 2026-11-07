@@ -21,7 +21,7 @@ from pathlib import Path
 
 from .llm import MODELS
 from .run import (FINAL_SOURCES, PILOT_SOURCES, RUNS, Budget, drop_errors, file_log, finish_run, load_dotenv,
-                  model_factory, prepare_run, run_agents, select_personas, setup_logging)
+                  model_factory, prepare_run, run_agents, select_personas, setup_logging, spent_so_far)
 
 log = logging.getLogger("hotcold")
 
@@ -148,7 +148,8 @@ def main():
                            "make_model": model_factory(model, spec["thinking"], spec["dry_run"])})
     log.info("batch %s: %d runs, %d agent sessions, limits %s", root.name, len(combos),
              sum(len(c["personas"]) for c in combos), spec["limits"])
-    out = asyncio.run(run_batch(combos, spec["limits"], Budget(spec["max_cost"]), root))
+    budget = Budget(spec["max_cost"], spent=sum(spent_so_far(c["outdir"]) for c in combos))  # resume counts past spending
+    out = asyncio.run(run_batch(combos, spec["limits"], budget, root))
     stopped = [r for r in out if r["stopped"]]
     log.info("batch done: $%.3f%s", sum(r["cost"] for r in out),
              "" if not stopped else f" -- {len(stopped)} runs stopped early: resume with --resume {root}")

@@ -34,14 +34,14 @@ FORMAT_RETRIES = 2
 
 SYSTEM_TEMPLATE = """{backstory}
 
-You are now taking part in an online study on Prolific, on your computer. You will see the study's screens in order, as text: pictures are described in square brackets, and the options you can click are shown in square brackets, like [ LEFT ]. Several screens that only need a click on "Next" may be shown together, separated by "--- next screen ---". When a screen asks you for an answer, give it in the requested format. Answer as yourself."""
+You are now taking part in an online study on Prolific, on your computer. You will see the study's screens in order, as text: pictures are described in square brackets, and the options you can click are shown in square brackets, like [ Next ]. Several screens that only need a click on "Next" may be shown together, separated by "--- next screen ---". When a screen asks you for an answer, give it in the requested format. Answer as yourself."""
 
 # Added after the original questionnaire, when no decision can be affected any more (not part of the .qsf).
 DEBRIEF_SCREEN = """Two last questions
 
 These questions are asked after the study has ended.
 
-In the rounds where the paired type-1 participant chose IN, how did you decide between LEFT and RIGHT? Please describe it in a few sentences.
+How did you decide between LEFT and RIGHT? Please describe it in a few sentences.
 [ ________ ]  (answer field: how_decided)
 
 Have you seen or read about this study, or a very similar one, before?
@@ -51,8 +51,7 @@ If yes, which one? (Leave empty if no.)
 [ ________ ]  (answer field: seen_which)"""
 
 DEBRIEF_SCHEMA_PROPS = {
-    "how_decided": ("string", None, "In the rounds where the paired type-1 participant chose IN, how did you decide "
-                                    "between LEFT and RIGHT? Please describe it in a few sentences."),
+    "how_decided": ("string", None, "How did you decide between LEFT and RIGHT? Please describe it in a few sentences."),
     "seen_before": ("string", ["Yes", "No"], "Have you seen or read about this study, or a very similar one, before?"),
     "seen_which": ("string", None, "If yes, which one? (Leave empty if no.)"),
 }
@@ -75,7 +74,7 @@ class Result:
     treatment: str
     crate: str
     group: int
-    completed: bool = False
+    completed: bool = False  # finished every original screen (questionnaire included), as finished==1 in the dataset
     drop_stage: int | None = None  # 2 = failed the quiz six times (as in the dataset); 9 = technical error
     error: str = ""
     quiz_attempts: int = 0
@@ -83,6 +82,7 @@ class Result:
     rounds: list[dict] = field(default_factory=list)  # round, p1trust, choice, reci
     questionnaire: dict = field(default_factory=dict)
     debrief: dict = field(default_factory=dict)
+    debrief_error: str = ""  # a technical failure on the added last screen does not undo a completed session
     usage: dict = field(default_factory=dict)
     calls: int = 0  # answered screens
     requests: int = 0  # requests sent, including technical retries
@@ -198,9 +198,12 @@ class Subject:
         q = self.m.block("Questionnaire")
         keys = {t: k for t, k in QUESTIONNAIRE_KEYS.items() if any(x.tag == t for x in q.questions)}
         self.res.questionnaire = await self.ask("Questionnaire", keys, _questionnaire_schema(q, keys))
-        self.res.debrief = await self.ask("Debrief", {}, _object({k: _prop(t, e, d) for k, (t, e, d)
-                                                                   in DEBRIEF_SCHEMA_PROPS.items()}), DEBRIEF_SCREEN)
         self.res.completed = True
+        try:
+            self.res.debrief = await self.ask("Debrief", {}, _object({k: _prop(t, e, d) for k, (t, e, d)
+                                                                       in DEBRIEF_SCHEMA_PROPS.items()}), DEBRIEF_SCREEN)
+        except SubjectError as e:
+            self.res.debrief_error = str(e)
 
     # --- schemas ------------------------------------------------------------------------------------------
     # Each answer field carries its question's literal text as description: in Qualtrics the answer box sits
@@ -223,7 +226,10 @@ class Subject:
                  for i, s in enumerate(matrix.statements, 1)}
         for i in (2, 3, 4):
             q = qs[f"QuizQ{k}.{i}"]
-            props[f"q{i}"] = _prop("string", list(q.choices), self._piped(q.text))
+            text = self._piped(q.text)
+            if set(q.choices) == {"True", "False"}:  # a bare statement next to a box reads as an assertion
+                text = f'True or false: "{text}"'
+            props[f"q{i}"] = _prop("string", list(q.choices), text)
         return _object(props)
 
     def _piped(self, text: str) -> str:

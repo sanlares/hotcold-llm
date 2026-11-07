@@ -15,7 +15,7 @@ import time
 from importlib import metadata
 from pathlib import Path
 
-from .llm import MODELS
+from .llm import MODELS, request_settings
 from .materials import QSF
 from .personas import DATASET, RAW
 from .subject import DEBRIEF_SCREEN, FORMAT_RETRIES, SYSTEM_TEMPLATE
@@ -56,9 +56,13 @@ def data_files(cfg: dict) -> dict:
              "dataset": DATASET}
     if cfg.get("persona") == "nemotron":
         from .sources import NEMO_FILE
-        files["nemotron"] = NEMO_FILE
-    return {k: {"path": str(v.relative_to(HERE.parent)) if v.is_relative_to(HERE.parent) else str(v),
-                "sha256": sha256(v)} for k, v in files.items()}
+        files["nemotron"] = NEMO_FILE  # Hugging Face revision: see sources.NEMO_REVISION
+    out = {k: {"path": str(v.relative_to(HERE.parent)) if v.is_relative_to(HERE.parent) else str(v),
+               "sha256": sha256(v)} for k, v in files.items()}
+    if "nemotron" in out:
+        from .sources import NEMO_REVISION
+        out["nemotron"]["huggingface_revision"] = NEMO_REVISION
+    return out
 
 
 def write_manifest(outdir: Path, cfg: dict) -> dict:
@@ -73,9 +77,8 @@ def write_manifest(outdir: Path, cfg: dict) -> dict:
         "uv_lock_sha256": sha256(HERE / "uv.lock") if (HERE / "uv.lock").exists() else None,
         "data": data_files(cfg),
         "model": model,
-        "model_settings": MODELS.get(model, {}).get(cfg.get("thinking", "off")) if model in MODELS else None,
+        "request_settings": request_settings(model, cfg.get("thinking", "off")) if model in MODELS else None,
         "prices_usd_per_mtok_in_out_cache": MODELS.get(model, {}).get("price"),
-        "temperature": "provider default (not set)",
         "format_retries": FORMAT_RETRIES,
         "system_template": SYSTEM_TEMPLATE,
         "debrief_screen": DEBRIEF_SCREEN,

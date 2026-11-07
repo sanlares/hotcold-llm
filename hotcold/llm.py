@@ -72,8 +72,7 @@ MODELS = {
     },
 }
 
-# Environment variable holding each provider's key. DeepInfra is reached through its OpenAI-compatible
-# endpoint, which supports strict JSON-schema answers (docs.deepinfra.com/chat/structured-outputs).
+# Environment variable holding each provider's key. DeepInfra is reached through its OpenAI-compatible endpoint.
 API_KEYS = {"anthropic": "ANTHROPIC_API_KEY", "openai": "OPENAI_API_KEY", "deepinfra": "DEEPINFRA_API_TOKEN"}
 DEEPINFRA_URL = "https://api.deepinfra.com/v1/openai"
 REQUEST_TIMEOUT_S = 120  # per HTTP request; LangChain retries timeouts, rate limits and 5xx with backoff
@@ -107,6 +106,18 @@ def cost_usd(model: str, usage: dict) -> float:
     ) / 1e6
 
 
+def request_settings(model: str, thinking: str = "off", max_tokens: int = 1024) -> dict:
+    """Everything sent with each request besides the messages (recorded in manifest.json)."""
+    provider = model.split(":", 1)[0]
+    return {"max_tokens": max(max_tokens, 8000) if thinking == "on" else max_tokens, "max_retries": 6,
+            "request_timeout_s": REQUEST_TIMEOUT_S, "hard_timeout_s": HARD_TIMEOUT_S,
+            "structured_output": "json_schema" + (", strict" if provider == "openai" else ", native" if provider == "anthropic"
+                                                  else ", checked locally + retries"),
+            "base_url": DEEPINFRA_URL if provider == "deepinfra" else "provider default",
+            "temperature": "provider default (not set)",
+            **{k: v for k, v in MODELS.get(model, {}).get(thinking, {}).items()}}
+
+
 class LangChainModel:
     """Any chat model LangChain supports, addressed as "provider:model" (e.g. "openai:gpt-5-nano")."""
 
@@ -138,7 +149,11 @@ class LangChainModel:
 
     async def respond(self, system: str, messages: list[dict], schema: dict):
         schema = {"title": "answer", "description": "Answer to the current screen", **schema}
-        runnable = self.chat.with_structured_output(schema, method="json_schema", include_raw=True)
+        # Options are enforced while generating where the provider supports it (Anthropic natively; OpenAI with
+        # strict=True). DeepInfra models are not forced: their answers are checked locally (subject.invalid) and a
+        # malformed answer is asked again, up to FORMAT_RETRIES times.
+        kw = {"strict": True} if self.provider == "openai" else {}
+        runnable = self.chat.with_structured_output(schema, method="json_schema", include_raw=True, **kw)
         try:
             out = await asyncio.wait_for(runnable.ainvoke(self._messages(system, messages)), HARD_TIMEOUT_S)
         except (openai.LengthFinishReasonError, openai.ContentFilterFinishReasonError) as e:
@@ -170,7 +185,9 @@ def _text(msg) -> str:
 def _usage(u: dict) -> dict:
     """LangChain usage -> uncached input, cache writes, cache reads, output (output includes reasoning)."""
     d = u.get("input_token_details", {}) or {}
-    read, write = d.get("cache_read", 0) or 0, d.get("cache_creation", 0) or 0
+    read = d.get("cache_read", 0) or 0
+    # langchain-anthropic reports cache writes under ephemeral_5m/1h_input_tokens and then sets cache_creation=0
+    write = sum(v or 0 for k, v in d.items() if k.startswith("ephemeral_")) or d.get("cache_creation", 0) or 0
     return {
         "input_tokens": (u.get("input_tokens", 0) or 0) - read - write,
         "cache_creation_input_tokens": write,

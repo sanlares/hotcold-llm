@@ -111,9 +111,36 @@ class RunState:
                 f" | errors {self.errors} | retries {self.format_retries} | ${self.cost:.3f} | eta {eta / 60:.0f} min")
 
 
-def done_ids(outdir: Path) -> set[str]:
+def _valid_lines(path: Path) -> list[str]:
+    """Lines of a .jsonl file that parse (a process killed while writing can leave the last line cut)."""
+    out = []
+    for x in path.read_text().splitlines() if path.exists() else []:
+        try:
+            json.loads(x)
+            out.append(x)
+        except json.JSONDecodeError:
+            pass
+    return out
+
+
+def repair_results(outdir: Path) -> int:
+    """Drop a cut last line of results.jsonl before resuming (that agent simply runs again). Returns lines dropped."""
     path = outdir / "results.jsonl"
-    return {json.loads(x)["agent_id"] for x in path.open()} if path.exists() else set()
+    if not path.exists():
+        return 0
+    lines = path.read_text().splitlines()
+    good = _valid_lines(path)
+    if len(good) != len(lines):
+        path.write_text("".join(x + "\n" for x in good))
+    return len(lines) - len(good)
+
+
+def done_ids(outdir: Path) -> set[str]:
+    return {json.loads(x)["agent_id"] for x in _valid_lines(outdir / "results.jsonl")}
+
+
+def spent_so_far(outdir: Path) -> float:
+    return sum(json.loads(x)["cost_usd"] for x in _valid_lines(outdir / "results.jsonl"))
 
 
 def drop_errors(outdir: Path) -> int:
@@ -121,7 +148,7 @@ def drop_errors(outdir: Path) -> int:
     path = outdir / "results.jsonl"
     if not path.exists():
         return 0
-    lines = path.read_text().splitlines()
+    lines = _valid_lines(path)
     bad = [x for x in lines if json.loads(x)["drop_stage"] == 9]
     with (outdir / "results_retried_errors.jsonl").open("a") as f:
         f.writelines(x + "\n" for x in bad)
@@ -138,7 +165,10 @@ async def run_agents(personas: list[Persona], make_model: Callable, model_name: 
     name = name or outdir.name
     rlog = logging.getLogger(f"hotcold.{name}")
     outdir.mkdir(parents=True, exist_ok=True)
+    if dropped := repair_results(outdir):
+        rlog.warning("%s: dropped %d cut line(s) from results.jsonl; those agents run again", name, dropped)
     already = done_ids(outdir)
+    session = time.strftime("%Y%m%d-%H%M%S")  # tells apart requests of different (resumed) sessions in calls.jsonl
     todo = [p for p in personas if p.agent_id not in already]
     st = RunState(total=len(todo))
     if on_start:
@@ -149,7 +179,7 @@ async def run_agents(personas: list[Persona], make_model: Callable, model_name: 
     calls_f = (outdir / "calls.jsonl").open("a")
 
     def log_call(rec: dict) -> None:
-        calls_f.write(json.dumps({"t": time.strftime("%Y-%m-%dT%H:%M:%S"), **rec}) + "\n")
+        calls_f.write(json.dumps({"t": time.strftime("%Y-%m-%dT%H:%M:%S"), "session": session, **rec}) + "\n")
 
     async def one(p: Persona) -> None:
         async with sem:
@@ -199,8 +229,7 @@ async def run_agents(personas: list[Persona], make_model: Callable, model_name: 
 
 # --- saving -------------------------------------------------------------------------------------------------
 def load_results(outdir: Path) -> list[dict]:
-    path = outdir / "results.jsonl"
-    return [json.loads(x) for x in path.open()] if path.exists() else []
+    return [json.loads(x) for x in _valid_lines(outdir / "results.jsonl")]
 
 
 def save(outdir: Path, personas: list[Persona], experiment: str = "baseline"):
@@ -223,7 +252,7 @@ def save(outdir: Path, personas: list[Persona], experiment: str = "baseline"):
         subj.append({
             **common, "completed": r["completed"], "drop_stage": r["drop_stage"], "error": r["error"],
             "quiz_attempts": r["quiz_attempts"], "calls": r["calls"], "requests": r["requests"],
-            "format_retries": r["format_retries"], "seconds": r["seconds"],
+            "format_retries": r["format_retries"], "seconds": r["seconds"], "debrief_error": r.get("debrief_error", ""),
             "model_versions": "; ".join(r["model_versions"]),
             "real_age": p.age, "real_gender": p.gender, "real_education": p.education,
             "persona_ref": p.source_ref, "match_age_diff": p.match_age_diff, "match_education": p.match_education,
@@ -356,8 +385,9 @@ def main():
     prepare_run(outdir, cfg, personas)
     file_log(outdir, outdir.name)
     make_model = model_factory(cfg["model"], cfg["thinking"], cfg["dry_run"])
+    budget = Budget(a.max_cost, spent=spent_so_far(outdir))  # a resumed run counts what it already spent
     st = asyncio.run(run_agents(personas, make_model, cfg["model"], outdir, asyncio.Semaphore(a.concurrency),
-                                Budget(a.max_cost), cfg["explain"]))
+                                budget, cfg["explain"]))
     print(finish_run(outdir, personas, st))
 
 

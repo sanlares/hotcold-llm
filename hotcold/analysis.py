@@ -33,6 +33,10 @@ PAPER_TABLE2 = {  # coefficient of Hot (and Hot x High), paper Table 2
     ("round 1", True): 0.010, ("rounds 19-20", True): 0.177, ("rounds 1-20", True): 0.065,
 }
 PAPER_N = {"round 1": 395, "rounds 19-20": 579, "rounds 1-20": 5815}
+PAPER_SE = {  # standard error of Hot, paper Table 2
+    ("round 1", False): 0.050, ("rounds 19-20", False): 0.049, ("rounds 1-20", False): 0.036,
+    ("round 1", True): 0.071, ("rounds 19-20", True): 0.081, ("rounds 1-20", True): 0.048,
+}
 
 
 # --- data ---------------------------------------------------------------------------------------------------
@@ -56,6 +60,8 @@ def load_runs(paths: list[Path]) -> tuple[pd.DataFrame, pd.DataFrame]:
         per = pd.read_csv(p / "personas.csv")[["agent_id", "age", "gender", "education"]]
         if not len(pan):
             continue
+        # as the paper (finished==1): only agents that completed every original screen
+        pan = pan[pan.agent_id.isin(sub.loc[sub.completed.astype(bool), "agent_id"])]
         pan = pan.merge(per, on="agent_id", how="left")
         pan["female"] = pan.gender.map({"Female": 1, "Male": 0, "Other": 0})
         pan["edu"] = pan.education.map(EDU)
@@ -106,20 +112,26 @@ def ols_cluster(df: pd.DataFrame, interaction: bool, cluster: bool) -> dict:
     return out
 
 
-def bootstrap_rate(d: pd.DataFrame, reps: int = 1000, seed: int = 0) -> tuple[float, float, float]:
-    """Share of reciprocation decisions with a 95% interval that resamples agents (an agent's rounds stay together).
-    For agents of one model this understates uncertainty about 'the model': they are not independent people."""
-    if not len(d):
-        return (np.nan, np.nan, np.nan)
+def _boot(d: pd.DataFrame, reps: int = 1000, seed: int = 0) -> np.ndarray:
+    """Bootstrap draws of the share of reciprocation decisions, resampling agents (an agent's rounds stay together)."""
     g = d.groupby("agent_id").reci.agg(["sum", "count"])
     s, c = g["sum"].values, g["count"].values
-    rng = np.random.default_rng(seed)
-    idx = rng.integers(0, len(g), size=(reps, len(g)))
-    draws = s[idx].sum(1) / c[idx].sum(1)
-    return s.sum() / c.sum(), np.quantile(draws, 0.025), np.quantile(draws, 0.975)
+    idx = np.random.default_rng(seed).integers(0, len(g), size=(reps, len(g)))
+    return s[idx].sum(1) / c[idx].sum(1)
 
 
-# --- tables -----------------------------------------------------------------------------------------------------
+def bootstrap_rate(d: pd.DataFrame, reps: int = 1000, seed: int = 0) -> tuple[float, float, float]:
+    """Share of reciprocation decisions with a 95% interval that resamples agents. For agents of one model the
+    interval only reflects chance under this prompt and this model version (agents are not independent people)."""
+    if not len(d):
+        return (np.nan, np.nan, np.nan)
+    draws = _boot(d, reps, seed)
+    return d.reci.sum() / len(d), np.quantile(draws, 0.025), np.quantile(draws, 0.975)
+
+
+MIN_AGENTS = 30  # pre-registered: a cell with fewer completed agents is shown but its gap is not interpreted
+
+
 def rates_table(panel: pd.DataFrame) -> pd.DataFrame:
     rows = []
     for src, p in panel.groupby("source", sort=False):
@@ -129,13 +141,43 @@ def rates_table(panel: pd.DataFrame) -> pd.DataFrame:
             for cell in CELLS:
                 r, lo, hi = bootstrap_rate(d[d.treat == cell])
                 row[cell] = f"{100 * r:.0f} [{100 * lo:.0f}–{100 * hi:.0f}]" if r == r else ""
-            for c in ("Low", "High"):
-                hot, cold = d[d.treat == f"Hot-{c}"].reci.mean(), d[d.treat == f"Cold-{c}"].reci.mean()
-                row[f"gap {c} (pp)"] = round(100 * (hot - cold), 1)
-            row["surprise model: Hot≥Cold and gap Low>High"] = (
-                "yes" if row["gap Low (pp)"] >= 0 and row["gap High (pp)"] >= 0 and row["gap Low (pp)"] > row["gap High (pp)"]
-                else "no")
             rows.append(row)
+    return pd.DataFrame(rows)
+
+
+def gap_table(panel: pd.DataFrame, window: str = "rounds 19-20") -> pd.DataFrame:
+    """Hot - Cold gap in Low and High with 95% intervals, and the verdict on the paper's main result."""
+    rows = []
+    for src, p in panel.groupby("source", sort=False):
+        d = decisions(p, window)
+        cells = {c: d[d.treat == c] for c in CELLS}
+        n = {c: cells[c].agent_id.nunique() for c in CELLS}
+        row = {"source": src, "agents per cell (HL/CL/HH/CH)": "/".join(str(n[c]) for c in CELLS)}
+        if min(n.values()) == 0:
+            rows.append({**row, "verdict": "empty cell"})
+            continue
+        draws = {c: _boot(cells[c], seed=i) for i, c in enumerate(CELLS)}
+        point = {c: cells[c].reci.mean() for c in CELLS}
+        gaps = {}
+        for lvl in ("Low", "High"):
+            g, gd = point[f"Hot-{lvl}"] - point[f"Cold-{lvl}"], draws[f"Hot-{lvl}"] - draws[f"Cold-{lvl}"]
+            gaps[lvl] = (g, np.quantile(gd, 0.025), np.quantile(gd, 0.975))
+            row[f"gap {lvl} (pp)"] = f"{100 * g:+.0f} [{100 * gaps[lvl][1]:+.0f}, {100 * gaps[lvl][2]:+.0f}]"
+        dd = (draws["Hot-Low"] - draws["Cold-Low"]) - (draws["Hot-High"] - draws["Cold-High"])
+        row["gap Low − gap High (pp)"] = (f"{100 * (gaps['Low'][0] - gaps['High'][0]):+.0f} "
+                                          f"[{100 * np.quantile(dd, 0.025):+.0f}, {100 * np.quantile(dd, 0.975):+.0f}]")
+        lo, hi = gaps["Low"][1], gaps["Low"][2]
+        if d.reci.nunique() == 1:
+            verdict = f"no variation (always {'LEFT' if d.reci.iloc[0] == 1 else 'RIGHT'})"
+        elif min(n.values()) < MIN_AGENTS:
+            verdict = f"cell under {MIN_AGENTS} agents: not interpreted"
+        elif lo > 0:
+            verdict = "as in the paper: Hot > Cold in Low"
+        elif hi < 0:
+            verdict = "against the paper: Cold > Hot in Low"
+        else:
+            verdict = "cannot tell"
+        rows.append({**row, "verdict": verdict})
     return pd.DataFrame(rows)
 
 
@@ -145,6 +187,10 @@ def regression_table(panel: pd.DataFrame) -> pd.DataFrame:
         for w in WINDOWS:
             d = decisions(p, w)
             for inter in (False, True):
+                if d.agent_id.nunique() < MIN_AGENTS or d.reci.nunique() < 2:
+                    rows.append({"source": src, "window": w, "spec": "Hot×High" if inter else "Hot + High",
+                                 "n": len(d), "Hot": "—", "Hot×High": "—"})
+                    continue
                 r = ols_cluster(d, inter, cluster=w != "round 1")
                 rows.append({"source": src, "window": w, "spec": "Hot×High" if inter else "Hot + High", "n": r["n"],
                              "Hot": f"{r.get('hot', np.nan):.3f} ({r.get('hot_se', np.nan):.3f})",
@@ -181,11 +227,39 @@ def checks_table(subjects: pd.DataFrame, panel: pd.DataFrame, human_r2: float) -
             "age plausible %": _pct(done.get("chk_age_plausible")), "age = Persona %": _pct(done.get("chk_age_matches")),
             "gender = Persona %": _pct(done.get("chk_gender_matches")),
             "education = Persona %": _pct(done.get("chk_education_matches")),
-            "says it knows the study %": _pct(done.get("d_seen_before", pd.Series(dtype=str)).eq("Yes")),
+            "says it knows a similar study %": _pct(done.get("d_seen_before", pd.Series(dtype=str)).eq("Yes")),
+            "debrief failed": int(s.get("debrief_error", pd.Series(dtype=str)).fillna("").astype(bool).sum()),
             f"R² demographics (humans {100 * human_r2:.1f}%)": f"{100 * r2:.1f}%",
             "model versions": "; ".join(sorted(set("; ".join(s.model_versions.dropna().astype(str)).split("; ")) - {""})),
             "cost USD": round(s.cost_usd.sum(), 3),
         })
+    return pd.DataFrame(rows)
+
+
+def exclusions_table(subjects: pd.DataFrame) -> pd.DataFrame:
+    """Agents that entered / completed / were excluded, per treatment cell (humans: 0.6% failed the quiz)."""
+    rows = []
+    for (src, cell), s in subjects.groupby(["source", "treat"], sort=False):
+        rows.append({"source": src, "cell": cell, "agents": len(s), "completed": int(s.completed.sum()),
+                     "quiz-excluded": int((s.drop_stage == 2).sum()), "technical errors": int((s.drop_stage == 9).sum())})
+    return pd.DataFrame(rows)
+
+
+def persona_table(panel: pd.DataFrame) -> pd.DataFrame:
+    """Demographic vs Nemotron Persona for each model, on the participants that completed in both."""
+    rows = []
+    for model, p in panel.groupby("model", sort=False):
+        arms = {a: g for a, g in p.groupby("persona")}
+        if not {"demographic", "nemotron"} <= set(arms):
+            continue
+        both = set(arms["demographic"].real_id) & set(arms["nemotron"].real_id)
+        row = {"model": model.split("/")[-1].split(":")[-1], "participants in both": len(both)}
+        for a in ("demographic", "nemotron"):
+            d = arms[a][arms[a].real_id.isin(both) & arms[a].reci.notna()]
+            row[f"{a} %"] = round(100 * d.reci.mean()) if len(d) else None
+        d = arms["demographic"][arms["demographic"].real_id.isin(both) & arms["demographic"].human_reci.notna()]
+        row["paired humans %"] = round(100 * d.human_reci.mean()) if len(d) else None
+        rows.append(row)
     return pd.DataFrame(rows)
 
 
@@ -238,13 +312,16 @@ def figure(panel: pd.DataFrame, path: Path) -> None:
 
 # --- entry points -------------------------------------------------------------------------------------------------
 def validate() -> list[str]:
-    """Reproduce Table 2 of the paper from the human data (coefficients of Hot to 3 decimals, and N)."""
+    """Reproduce Table 2 of the paper from the human data: coefficient and standard error of Hot (3 decimals), N,
+    and the two gaps quoted in the text."""
     h = humans()
     problems = []
     for (w, inter), target in PAPER_TABLE2.items():
         r = ols_cluster(decisions(h, w), inter, cluster=w != "round 1")
         if round(r["hot"], 3) != target:
             problems.append(f"{w}, {'Hot×High' if inter else 'Hot+High'}: Hot = {r['hot']:.3f}, paper {target}")
+        if round(r["hot_se"], 3) != PAPER_SE[(w, inter)]:
+            problems.append(f"{w}, {'Hot×High' if inter else 'Hot+High'}: SE = {r['hot_se']:.3f}, paper {PAPER_SE[(w, inter)]}")
         if r["n"] != PAPER_N[w]:
             problems.append(f"{w}: N = {r['n']}, paper {PAPER_N[w]}")
     # the gaps quoted in the text (17.73 pp in Low, 6.58 in High, rounds 19-20) are the interacted model's
@@ -256,25 +333,42 @@ def validate() -> list[str]:
     return problems
 
 
+def with_paired_humans(h: pd.DataFrame, panel: pd.DataFrame) -> pd.DataFrame:
+    """All 396 humans first; then, for each model x Persona, its agents and the humans paired with exactly the agents
+    that completed (same people, same rounds: `human_reci`)."""
+    parts = [h.assign(source="humans (all)")]
+    for src, p in panel.groupby("source", sort=False):
+        parts.append(p)
+        parts.append(p.assign(reci=p.human_reci, source=f"{src} · paired humans"))
+    return pd.concat(parts, ignore_index=True)
+
+
 def analyse(paths: list[Path], out: Path) -> str:
     h = humans()
     panel, subjects = load_runs(paths)
-    keep = set(panel.real_id)  # the same people the agents are paired with
-    allp = pd.concat([h[h.real_id.isin(keep)], panel], ignore_index=True)
+    allp = with_paired_humans(h, panel)
+    nemo = panel[(panel.persona == "nemotron") & panel.gender.isin(["Female", "Male"])]
     out.mkdir(parents=True, exist_ok=True)
     tables = {
         "1. Reciprocation rate (%) by treatment, 95% interval resampling agents": rates_table(allp),
-        "2. Distribution of agents: never / sometimes / always reciprocate": types_table(allp),
-        "3. Reciprocation by blocks of rounds (%), Hot vs Cold": rounds_table(allp),
-        "4. Paper's Table 2 (LPM, controls age, female, education; clustered SE)": regression_table(allp),
-        "5. Exclusions and checks": checks_table(subjects, panel, demographics_r2(h[h.real_id.isin(keep)])),
+        "2. Hot − Cold gap, rounds 19-20 (the paper's main window), 95% intervals": gap_table(allp),
+        "3. Distribution of agents: never / sometimes / always reciprocate": types_table(allp),
+        "4. Reciprocation by blocks of rounds (%), Hot vs Cold": rounds_table(allp),
+        "5. Paper's Table 2 (LPM, controls age, female, education; clustered SE)": regression_table(allp),
+        "6. Demographic vs Nemotron Persona, same participants (rounds 1-20)": persona_table(panel),
+        "7. Exclusions per cell (humans: 3 of 534 failed the quiz)": exclusions_table(subjects),
+        "8. Checks": checks_table(subjects, panel, demographics_r2(h)),
+        "9. Sensitivity: Nemotron without participants of gender 'Other' or not said, rounds 19-20":
+            gap_table(nemo.assign(source=nemo.source + " (gender F/M only)")) if len(nemo) else pd.DataFrame(),
     }
-    text = ["# Results", "", "Theory (payoff-maximising second mover, paper Sec. 2): 0% in every cell. "
-            "Surprise model: Hot ≥ Cold, gap larger in Low than in High.", ""]
+    text = ["# Results", "",
+            "Theory (payoff-maximising second mover, paper Sec. 2): 0% in every cell. Surprise model: Hot ≥ Cold, "
+            "gap larger in Low than in High. Only agents that completed the original screens are analysed. "
+            "'paired humans' = the real participants paired with exactly those agents, in the same rounds.", ""]
     for i, (title, t) in enumerate(tables.items(), 1):
         t.to_csv(out / f"table{i}.csv", index=False)
-        text += [f"## {title}", "", t.to_markdown(index=False), ""]
-    figure(allp, out / "fig_rounds19_20.png")
+        text += [f"## {title}", "", t.to_markdown(index=False) if len(t) else "(nothing to show)", ""]
+    figure(allp[~allp.source.str.endswith("paired humans")], out / "fig_rounds19_20.png")
     text += ["![](fig_rounds19_20.png)", ""]
     (out / "results.md").write_text("\n".join(text))
     return "\n".join(text)

@@ -55,7 +55,7 @@ La ruta se define en `hotcold/materials.py` (`PACKAGE`).
 
 ```bash
 mkdir -p data/external/nemotron_uk
-curl -sL -o data/external/nemotron_uk/train-00000-of-00007.parquet https://huggingface.co/datasets/nvidia/Nemotron-Personas-UK/resolve/main/data/train-00000-of-00007.parquet
+curl -sL -o data/external/nemotron_uk/train-00000-of-00007.parquet https://huggingface.co/datasets/nvidia/Nemotron-Personas-UK/resolve/0bb75b1469b90795eb56fa8a64927dac77dd0a11/data/train-00000-of-00007.parquet
 ```
 
 ### 3. Claves
@@ -126,6 +126,14 @@ uv run python -m hotcold.batch --resume runs/<lote> --retry-errors
 
 **Seguimiento.** Mientras corre, `runs/<lote>/status.json` muestra el avance de cada combinación.
 
+Sondeo de conocimiento: una pregunta por modelo, fuera del personaje, sobre si conoce el paper. Son 8 pedidos y cuesta centavos.
+
+```bash
+uv run python -m hotcold.probe_knowledge --out runs/<lote>/knowledge_probe.csv
+```
+
+**Archivo de resultados.** `runs/` no se sube a git. La carpeta del lote definitivo se archiva entera (OSF o Zenodo), con un enlace en la tesis.
+
 ### 6. Analizar
 
 ```bash
@@ -164,11 +172,15 @@ Replica el *Survey Flow* del `.qsf`:
 4. Pantalla de pago y cuestionario final original.
 5. **Pantalla agregada**, cuando ya no puede influir en ninguna decisión:
    - cómo decidió entre LEFT y RIGHT;
-   - si conoce este estudio (para detectar si el modelo lo vio durante su entrenamiento).
+   - si conoce este estudio o uno parecido. Responde la Persona, así que mide a lo sumo que reconoce el tipo de juego. Para saber si el *modelo* conoce el paper hay una pregunta aparte, fuera del personaje (`hotcold.probe_knowledge`).
 
 Toda la sesión es **una sola conversación**: el agente recuerda cada pantalla, cada resultado y cada decisión propia. Las pantallas que solo piden "Next" se muestran juntas con la siguiente que pide una respuesta.
 
-Las respuestas se piden en un formulario con opciones cerradas (*structured output*), así que no hay que interpretar texto libre. Cada casilla del formulario lleva el texto de su pregunta, como en la pantalla original.
+Las respuestas se piden en un formulario (*structured output*), así que no hay que interpretar texto libre. Cada casilla lleva el texto de su pregunta, como en la pantalla original; en las preguntas Verdadero/Falso del quiz dice "True or false: …".
+
+Cómo se garantiza que la respuesta sea una de las opciones depende del proveedor:
+- **Anthropic y OpenAI:** el proveedor obliga a elegir una de las opciones mientras genera la respuesta (OpenAI con `strict=True`).
+- **DeepInfra:** el proveedor no lo obliga. Cada respuesta se controla al recibirla y, si no encaja, se vuelve a pedir.
 
 - **Falla técnica** (respuesta vacía, cortada o fuera de las opciones): se repite el mismo pedido hasta 2 veces.
 - **Respuesta rara pero válida** (por ejemplo, una edad negativa): se guarda tal cual y se marca. Es conducta del modelo, no se corrige.
@@ -202,9 +214,11 @@ Todos se llaman con LangChain (`init_chat_model`), así que cualquier proveedor 
 | Figura de pagos (imagen) | Descripción en texto con los mismos números, que también están en las instrucciones |
 | Consentimiento, Prolific ID, "¿Sos estudiante?" | Se omiten; la Persona ya es estudiante |
 | Pantallas de solo "Next" | Agrupadas con la siguiente pantalla que pide respuesta |
-| Cada pantalla, una por vez | El agente conserva toda la sesión en memoria y puede "releer" las instrucciones; un humano no |
+| Botón "Anterior" activado en Qualtrics: se podía volver a pantallas anteriores | El agente tiene toda la sesión en su memoria (puede "releerla"), pero no puede cambiar una respuesta ya dada |
+| "Expectation" y "Comment" del cuestionario eran optativas | El agente tiene que contestarlas ("Comment" puede quedar vacío) |
 | Pago real | El texto se mantiene, pero no hay incentivo real |
-| Cuestionario final | Igual, más una pantalla agregada al final (cómo decidió y si conoce el estudio) |
+| Cuestionario final | Igual, más una pantalla agregada al final (cómo decidió y si conoce el estudio). Un error técnico en esa pantalla no anula una sesión completa |
+| Quiz: las preguntas Verdadero/Falso | El texto de la pantalla es el original; en la casilla del formulario se agrega "True or false:" |
 
 ## Replicabilidad
 
@@ -229,6 +243,7 @@ hotcold/
   manifest.py        versiones de código, datos y librerías
   audit_inputs.py    auditoría de todo lo que se manda a los agentes
   analysis.py        tablas, gráfico y validación con la Tabla 2 del paper
+  probe_knowledge.py pregunta a cada modelo, fuera del personaje, si conoce el paper
   compare.py, twin_trust.py, make_twin_narratives.py, personas_rich.yaml   solo pilotos
 tests/               tests sin llamadas a modelos
 docs/                plan de análisis, pilotos, auditoría del input, ejemplos de prompts

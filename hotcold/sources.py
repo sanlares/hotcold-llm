@@ -110,6 +110,7 @@ NEMO_FIELDS = ["persona", "cultural_background", "professional_persona", "hobbie
 
 
 NEMO_FILE = EXT / "nemotron_uk/train-00000-of-00007.parquet"  # one of 7 random shards (~143k personas)
+NEMO_REVISION = "0bb75b1469b90795eb56fa8a64927dac77dd0a11"  # Hugging Face commit of the file used (2026-10-20)
 
 # Who counts as a student in Nemotron: the census occupation is "Does not apply" (not in employment) AND the
 # text describes the person as studying now. A bare "student" is not enough: older personas mention "student
