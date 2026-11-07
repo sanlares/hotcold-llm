@@ -65,8 +65,8 @@ def load_runs(paths: list[Path]) -> tuple[pd.DataFrame, pd.DataFrame]:
         pan = pan.merge(per, on="agent_id", how="left")
         pan["female"] = pan.gender.map({"Female": 1, "Male": 0, "Other": 0})
         pan["edu"] = pan.education.map(EDU)
-        pan["source"] = pan.model.str.split("/").str[-1].str.split(":").str[-1] + " | " + pan.persona
-        sub["source"] = sub.model.str.split("/").str[-1].str.split(":").str[-1] + " | " + sub.persona
+        pan["source"] = pan.model.str.split("/").str[-1].str.split(":").str[-1] + " · " + pan.persona
+        sub["source"] = sub.model.str.split("/").str[-1].str.split(":").str[-1] + " · " + sub.persona
         panels.append(pan)
         subjects.append(sub)
     return pd.concat(panels, ignore_index=True), pd.concat(subjects, ignore_index=True)

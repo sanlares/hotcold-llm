@@ -128,4 +128,53 @@ OpenAI y DeepInfra recibían `strict: False`.
 
 Como cambió lo que ven los agentes (puntos 3, 4, 6 y 8), se repite el piloto de control con el código final (`runs/20261107-133726_batch_piloto-control-2`).
 
-**Estado:** quedó a medias porque DeepInfra se quedó sin saldo (error 402). Se completaron Haiku, gpt-5-nano, DeepSeek, gpt-oss y Qwen3 235B con la Persona demográfica. Las corridas con saldo agotado se detuvieron solas, sin marcar agentes como error, y se retoman con `--resume`. Fue, sin buscarlo, una prueba real del freno ante errores fatales.
+### Resultado del segundo piloto de control
+
+16 corridas (8 modelos × 2 Personas) × 20 agentes = 320 agentes. Costo total: US$1,29.
+
+**Robustez.**
+- 0 errores técnicos y 2 respuestas mal formadas que se resolvieron al volver a pedirlas.
+- A mitad de camino, DeepInfra se quedó sin saldo (error 402). Las corridas afectadas se detuvieron solas, sin marcar agentes como error.
+- Después de cargar saldo se retomaron con `--resume`. Ningún agente se repitió (controlado en los 16 `results.jsonl`) y el gasto anterior se siguió contando.
+
+**gpt-5-nano no aprueba el quiz en Hot.**
+- Los 20 agentes de Hot (10 por Persona) fallaron los 6 intentos; los 20 de Cold aprobaron.
+- En 113 de los 120 intentos el único error fue q3: responde "False" a "en cada ronda sabés lo que eligió el otro antes de decidir", que en Hot es verdadero.
+- **Consecuencia para la corrida definitiva:** nano casi no va a tener agentes en Hot, así que para nano no se puede calcular la brecha Hot − Cold. Ya estaba previsto presentarlo aparte; ahora se sabe que su aporte se limita a Cold y a la exclusión misma.
+- **Decisión pendiente del autor:** mantenerlo como está o cambiarlo (ver el log de recomendaciones).
+
+**Edad en texto libre.** nano escribió, entre otras cosas, "Your age", "?" y "_unused". Se guarda tal cual y se marca en `chk_age_*`, como estaba previsto. Los otros 7 modelos escribieron la edad de su Persona en el 100% de los casos.
+
+**La Persona sigue moviendo mucho la conducta.** Con los mismos 20 participantes, % de decisiones de devolver (rondas 1–20, tabla 6 del análisis):
+
+| Modelo | Demográfica | Nemotron | Humanos emparejados |
+|---|---|---|---|
+| DeepSeek V4 Flash | 39 | 54 | 37 |
+| Llama 4 Scout | 17 | 31 | 37 |
+| Qwen3 235B | 0 | 13 | 37 |
+| Qwen 3.8 Flash | 0 | 20 | 37 |
+| Claude Haiku 5.5 | 12 | 25 | 37 |
+| Gemma 4 31B | 7 | 63 | 37 |
+| gpt-oss-120b | 69 | 60 | 37 |
+| gpt-5-nano (solo Cold) | 100 | 100 | 34 |
+
+Con 20 agentes por combinación todas las celdas quedan por debajo de 30 agentes, así que ninguna brecha se interpreta: el piloto solo controla que todo funcione.
+
+**¿Los modelos conocen el paper?** Pregunta fuera del personaje (`hotcold.probe_knowledge`), una vez por modelo:
+
+| Modelo | ¿Lo conoce? | % LEFT que predice, Hot / Cold |
+|---|---|---|
+| DeepSeek V4 Flash | No | 30 / 55 |
+| Llama 4 Scout | Sí | 35 / 13 |
+| Gemma 4 31B | Sí | 65 / 45 |
+| gpt-oss-120b | No | 55 / 30 |
+| Qwen3 235B | No | 60 / 40 |
+| Qwen 3.8 Flash | Sí | 65 / 30 |
+| Claude Haiku 5.5 | No está seguro | 40 / 55 |
+| gpt-5-nano | No | 50 / 50 |
+
+Humanos de *Baseline*, rondas 1–20: 45% en Hot y 39% en Cold.
+
+Los tres que dicen conocerlo resumen "más reciprocidad en Hot que en Cold". Eso se deduce del título y de la descripción incluida en la pregunta, así que no prueba que lo hayan leído. Ninguno dio cifras ni detalles que no estuvieran en la pregunta.
+
+**Corrección.** En las tablas del análisis, el nombre "modelo | Persona" usaba una barra vertical, que en markdown parte la columna. Ahora es "modelo · Persona".

@@ -30,6 +30,8 @@ Es un juego de confianza que se repite 20 rondas, cada vez con otro participante
 | Exclusiones | Las del original: quien falla el quiz de comprensión 6 veces queda afuera |
 | Análisis | [`docs/plan_de_analisis.md`](docs/plan_de_analisis.md), escrito antes de correr |
 
+Para ver cómo funciona por dentro, [`docs/flujo_completo.md`](docs/flujo_completo.md) sigue a un agente real de principio a fin: su Persona, cada pantalla, el formulario que llena, lo que se guarda y cómo entra al análisis.
+
 En [`docs/pilotos.md`](docs/pilotos.md) están los pilotos que llevaron a este diseño.
 
 ## Cómo reproducir
@@ -246,6 +248,6 @@ hotcold/
   probe_knowledge.py pregunta a cada modelo, fuera del personaje, si conoce el paper
   compare.py, twin_trust.py, make_twin_narratives.py, personas_rich.yaml   solo pilotos
 tests/               tests sin llamadas a modelos
-docs/                plan de análisis, pilotos, auditoría del input, ejemplos de prompts
+docs/                flujo de un agente, plan de análisis, pilotos, revisión, auditoría del input, ejemplos
 data/derived/        textos derivados usados en los pilotos (Twin-2K-500)
 ```

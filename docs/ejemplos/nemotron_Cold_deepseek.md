@@ -1,8 +1,10 @@
 # Conversación completa — `baseline_130` (Cold, tasa de confianza 69%, Persona nemotron)
 
-Modelo: DeepSeek-V4-Flash-0731. Tomada tal cual de `results.jsonl` del piloto de control (noviembre de 2026). Persona de Nemotron emparejada con el participante real.
+Modelo: DeepSeek-V4-Flash-0731. Tomada tal cual de `results.jsonl` del segundo piloto de control (noviembre de 2026). Persona de Nemotron emparejada con el participante real.
 
 Cada sección es un mensaje. **SYSTEM** es el mensaje inicial (la Persona y las reglas del entorno); **USER** es lo que ve el agente (pantallas del `.qsf`); **AGENT** es su respuesta en el formulario. Todo queda en la conversación, que funciona como memoria.
+
+Lo que no se ve acá es el formulario que acompaña a cada pantalla: las casillas, sus opciones y el texto de cada pregunta. Ver `docs/flujo_completo.md`.
 
 ## SYSTEM
 
@@ -21,7 +23,7 @@ In his spare time, Liam enjoys following the progress of Celtic FC and attending
 
 Having focused entirely on his education thus far, Liam aims to secure a stable entry-level role in administration or logistics upon graduation. He seeks a professional environment with clear hierarchies and defined expectations where his reliability and methodical nature will be valued. His primary goal is to establish a predictable career path that offers long-term security.
 
-You are now taking part in an online study on Prolific, on your computer. You will see the study's screens in order, as text: pictures are described in square brackets, and the options you can click are shown in square brackets, like [ LEFT ]. Several screens that only need a click on "Next" may be shown together, separated by "--- next screen ---". When a screen asks you for an answer, give it in the requested format. Answer as yourself.
+You are now taking part in an online study on Prolific, on your computer. You will see the study's screens in order, as text: pictures are described in square brackets, and the options you can click are shown in square brackets, like [ Next ]. Several screens that only need a click on "Next" may be shown together, separated by "--- next screen ---". When a screen asks you for an answer, give it in the requested format. Answer as yourself.
 ```
 
 ## 1. USER
@@ -824,7 +826,7 @@ Please make sure you click "Submit " to complete the study. Otherwise, your data
 ## 44. AGENT
 
 ```text
-{"expectation": "Yes", "surprise": "No", "temptation": "1", "complexity": "3", "reciprocity1": "8", "reciprocity2": "The present worth 5 Pounds", "age": "26", "gender": "Male", "education": "Bachelor student", "comment": "No comments."}
+{"expectation": "Yes", "surprise": "No", "temptation": "1", "complexity": "2", "reciprocity1": "8", "reciprocity2": "The present worth 20 Pounds", "age": "26", "gender": "Male", "education": "Bachelor student", "comment": "No comments, the study was clear and straightforward."}
 ```
 
 ## 45. USER
@@ -834,7 +836,7 @@ Two last questions
 
 These questions are asked after the study has ended.
 
-In the rounds where the paired type-1 participant chose IN, how did you decide between LEFT and RIGHT? Please describe it in a few sentences.
+How did you decide between LEFT and RIGHT? Please describe it in a few sentences.
 [ ________ ]  (answer field: how_decided)
 
 Have you seen or read about this study, or a very similar one, before?
@@ -847,5 +849,5 @@ If yes, which one? (Leave empty if no.)
 ## 46. AGENT
 
 ```text
-{"how_decided": "I always chose LEFT because it seemed fair to both me and the type-1 participant, and I didn't want to take advantage of their choice of IN. The guaranteed equal earnings of 35 points felt like a good balance, and I wasn't tempted to risk the other option.", "seen_before": "No", "seen_which": ""}
+{"how_decided": "I chose LEFT every time because it gave both me and the type-1 participant a fair and equal outcome (35 points each) if they chose IN, and it still gave 25 points if they chose OUT. I didn't feel the need to take the higher personal payoff from RIGHT since it seemed less fair to the other person, and the difference wasn't worth it to me.", "seen_before": "No", "seen_which": ""}
 ```
