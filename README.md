@@ -122,7 +122,7 @@ uv run python -m hotcold.batch --resume runs/<lote> --retry-errors
 
 `hotcold.run` corre una sola combinación de modelo y Persona (`--model`, `--persona`).
 
-**Límites.** Por defecto, cada proveedor tiene un máximo de agentes al mismo tiempo: DeepInfra 32, Anthropic 16, OpenAI 16. Se cambian con `--limits deepinfra=32,anthropic=16`.
+**Límites.** Por defecto, cada proveedor tiene un máximo de agentes al mismo tiempo: DeepInfra 64, Anthropic 16, OpenAI 16. Se cambian con `--limits deepinfra=64,anthropic=16`. Con esos límites, la corrida completa lleva unas 1,5–2 horas (medido en el piloto de control: entre 36 y 98 segundos por agente, según el modelo).
 
 **Seguimiento.** Mientras corre, `runs/<lote>/status.json` muestra el avance de cada combinación.
 

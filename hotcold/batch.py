@@ -36,7 +36,7 @@ FINAL_MODELS = [
     "anthropic:claude-haiku-5-5",
     "openai:gpt-5-nano",
 ]
-DEFAULT_LIMITS = {"deepinfra": 32, "anthropic": 16, "openai": 16}  # agents in progress at once, per provider
+DEFAULT_LIMITS = {"deepinfra": 64, "anthropic": 16, "openai": 16}  # agents in progress at once, per provider
 
 
 def short(model: str) -> str:
