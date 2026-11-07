@@ -1,0 +1,309 @@
+import asyncio
+import json
+import re
+
+import pandas as pd
+import pytest
+
+from hotcold.llm import ScriptedModel
+from hotcold.materials import N_ROUNDS, QSF, clean, load
+from hotcold.personas import DATASET, build_personas, load_participants
+from hotcold.subject import Subject
+
+
+@pytest.fixture(scope="module")
+def m():
+    return load("baseline")
+
+
+@pytest.fixture(scope="module")
+def personas():
+    return build_personas("baseline")
+
+
+def run(p, m, model):
+    s = Subject(p, m, model)
+    return s, asyncio.run(s.run())
+
+
+def first(personas, treatment, crate="28%"):
+    return next(p for p in personas if p.treatment == treatment and p.crate == crate)
+
+
+def test_sequences(m):
+    assert len(m.sequences) == 80
+    for s in m.sequences.values():
+        assert len(s.choices) == N_ROUNDS and s.choices[0] == "IN"  # round 1 is always a trusting first mover
+    counts = pd.Series([(s.treatment, s.crate) for s in m.sequences.values()]).value_counts()
+    assert (counts == 20).all()
+
+
+def test_screens_are_verbatim(m):
+    """Every rendered round screen equals the cleaned Qualtrics question text (only CRate/DRate piped in)."""
+    survey = json.loads(QSF["baseline"].read_text())
+    raw = {e["Payload"]["DataExportTag"]: e["Payload"]["QuestionText"] for e in survey["SurveyElements"]
+           if e["Element"] == "SQ"}
+    for r in (1, 7, 20):
+        for block, tag in [(f"HotQuestion{r}OUT", f"HotOUT{r}"), (f"Result{r}.3", f"Result{r}.3")]:
+            expected = clean(raw[tag]).replace("${e://Field/CRate}", "28%").replace("${e://Field/DRate}", "72%")
+            assert m.block(block).render("28%", "72%") == expected
+
+
+def test_personas_match_real_people(personas):
+    people = load_participants("baseline").set_index("real_id")
+    assert len(personas) == 396
+    assert len({p.agent_id for p in personas}) == len({p.backstory() for p in personas}) == 396
+    ds = set(pd.read_csv(DATASET, usecols=["id"]).id)
+    for p in personas:
+        r = people.loc[p.real_id]
+        assert p.real_id in ds
+        assert (p.age, p.gender, p.education, p.group) == (int(r.Age), r.Gender, r.Education, int(r.Group))
+        assert p.agent_id.split("_")[1] == p.real_id.rsplit("_", 1)[1]
+
+
+def test_personas_are_reproducible_and_outcome_free(personas):
+    again = build_personas("baseline")
+    assert [p.backstory() for p in personas] == [p.backstory() for p in again]
+    banned = re.compile(r"generous|selfish|trust|fair|kind|honest|greedy|reciproc|altruis|charit|volunteer|"
+                        r"gambl|poker|religio|political views|vote|personality|money", re.I)
+    for p in personas:
+        assert not banned.search(p.backstory()), p.backstory()
+
+
+def test_hot_asks_only_on_in(m, personas):
+    p = first(personas, "Hot")
+    seq = m.sequences[p.group]
+    s, res = run(p, m, ScriptedModel("left"))
+    n_in = seq.choices.count("IN")
+    assert res.completed and res.quiz_attempts == 1
+    assert res.calls == 1 + n_in + 2  # quiz + one decision per IN + questionnaire + debrief
+    assert [x["p1trust"] for x in res.rounds] == [int(c == "IN") for c in seq.choices]
+    assert all((x["reci"] == 1) == (x["p1trust"] == 1) for x in res.rounds)
+
+
+def test_cold_asks_every_round(m, personas):
+    p = first(personas, "Cold", "69%")
+    s, res = run(p, m, ScriptedModel("right"))
+    assert res.completed and res.calls == 1 + N_ROUNDS + 2
+    assert all(x["reci"] == 0 for x in res.rounds)
+    # the result shown after a decision matches the type-1 choice and own choice
+    seq = m.sequences[p.group]
+    r_out = seq.choices.index("OUT") + 1
+    nxt = next(msg["content"] for msg in s.messages if f"Round {r_out} – Result" in msg["content"])
+    assert f"in round {r_out} chose OUT." in nxt
+
+
+def test_quiz_retries_and_exclusion(m, personas):
+    p = first(personas, "Hot")
+    s, res = run(p, m, ScriptedModel("left", wrong_quiz=2))
+    assert res.completed and res.quiz_attempts == 3
+    assert "Some of your answers are not correct" in s.messages[2]["content"]
+    assert "It is your third chance" in s.messages[4]["content"]
+
+    s, res = run(p, m, ScriptedModel("left", wrong_quiz=6))
+    assert not res.completed and res.drop_stage == 2 and res.quiz_attempts == 6 and not res.rounds
+
+
+def test_text_entry_fields_labelled(m):
+    from hotcold.subject import QUESTIONNAIRE_KEYS
+    text = m.block("Questionnaire").render("28%", "72%", QUESTIONNAIRE_KEYS)
+    assert "(answer field: age)" in text and "(answer field: comment)" in text
+
+
+def test_backstory_states_real_education_and_gender(personas):
+    from hotcold.personas import EDUCATION_LINE
+    for p in personas:
+        b = p.backstory()
+        assert EDUCATION_LINE[p.education] in b
+        if p.gender == "I would rather not say":
+            assert "prefer not to disclose your gender" in b
+
+
+def test_rich_personas_are_the_pilot_agents_and_optional(personas):
+    from hotcold.personas import add_rich
+    from hotcold.run import sample
+    basic = {p.agent_id: p.backstory() for p in personas}
+    rich = add_rich(build_personas("baseline"))
+    assert {p.agent_id for p in rich} == {p.agent_id for p in sample(personas, 5, 1)}
+    for p in rich:
+        b = p.backstory()
+        assert b.startswith(basic[p.agent_id]) and len(b) > len(basic[p.agent_id]) + 500
+    assert all(not p.rich for p in personas)  # basic mode untouched
+
+
+@pytest.mark.parametrize("src", ["prism", "nemotron", "twin-summary", "twin-narrative", "twin-demographic"])
+def test_external_sources_keep_pilot_sequences_and_hide_games(personas, src):
+    from hotcold import sources
+    from hotcold.run import sample
+    if not (sources.EXT / "prism/survey.jsonl").exists():
+        pytest.skip("external data not downloaded")
+    base = sample(personas, 5, 1)
+    built = sources.build(src, base)
+    assert [(p.group, p.treatment, p.crate) for p in built] == [(p.group, p.treatment, p.crate) for p in base]
+    assert len({p.source_ref for p in built}) == 20
+    for p in built:
+        text = p.backstory().lower()
+        assert "trust game" not in text and "dictator" not in text and "ultimatum" not in text
+        assert "(anonymous) person" not in text
+
+
+def test_twin_qa_has_no_games():
+    from hotcold import sources
+    if not (sources.EXT / "twin/persona_chunk_001.parquet").exists():
+        pytest.skip("external data not downloaded")
+    for pid in sources.twin_sample(20):
+        q = sources.twin_qa(pid)
+        assert "tripled" not in q and "(anonymous) person" not in q and "keep for yourself" not in q
+
+
+# --- final design: Personas ------------------------------------------------------------------------------------
+def test_demographic_persona_has_only_real_data(personas):
+    from hotcold.personas import demographic_personas
+    demo = demographic_personas(personas)
+    for p, d in zip(personas, demo):
+        b = d.backstory()
+        assert p.name not in b and p.hometown not in b and p.field_of_study not in b
+        assert f"aged {p.age}" in b and "student" in b and "UK" in b
+        assert d.name == "" and d.hobbies == [] and d.source == "demographic"
+    assert len({d.backstory() for d in demo}) < len(demo)  # same demographics -> same text: nothing invented
+
+
+def test_nemotron_for_all_agents(personas):
+    from hotcold import sources
+    from hotcold.run import sample
+    if not sources.NEMO_FILE.exists():
+        pytest.skip("external data not downloaded")
+    full = sources.nemotron_personas(personas)
+    assert len({p.source_ref for p in full}) == 396  # each Nemotron persona used once
+    assert all(p.match_student and p.match_age_diff <= 5 for p in full)
+    pool = sources.nemotron_pool().set_index("uuid")
+    assert pool.loc[[p.source_ref for p in full]].student.all()
+    sub = sources.nemotron_personas(sample(personas, 5, 1))  # a pilot gets the same match as the full run
+    by_id = {p.agent_id: p.source_ref for p in full}
+    assert all(by_id[p.agent_id] == p.source_ref for p in sub)
+    assert [p.backstory() for p in full] == [p.backstory() for p in sources.nemotron_personas(build_personas("baseline"))]
+    for p in full:
+        b = p.backstory()
+        assert f"aged {p.age}" in b and "trust game" not in b.lower()
+
+
+# --- final design: prompt ------------------------------------------------------------------------------------------
+def test_answer_fields_carry_their_question(m, personas):
+    s = Subject(personas[0], m, ScriptedModel())
+    quiz = s._quiz_schema(1)["properties"]
+    assert "chooses IN and you choose RIGHT" in quiz["q1_4"]["description"]
+    assert "same type-1 participant" in quiz["q2"]["description"]
+    from hotcold.subject import QUESTIONNAIRE_KEYS, _questionnaire_schema
+    q = _questionnaire_schema(m.block("Questionnaire"), QUESTIONNAIRE_KEYS)["properties"]
+    assert q["age"] == {"type": "string", "description": "What is your age?"}  # free text, as in Qualtrics
+
+
+def test_debrief_comes_last(m, personas):
+    from hotcold.subject import DEBRIEF_SCREEN
+    s, res = run(first(personas, "Cold"), m, ScriptedModel("left"))
+    users = [x["content"] for x in s.messages if x["role"] == "user"]
+    assert users[-1] == DEBRIEF_SCREEN and "What is your age?" in users[-2]
+    assert set(res.debrief) == {"how_decided", "seen_before", "seen_which"}
+
+
+# --- final design: errors, resume, limits, records -----------------------------------------------------------------
+def _run_agents(ps, factory, outdir, limit=4, budget=None):
+    from hotcold.run import run_agents
+    return asyncio.run(run_agents(ps, factory, "scripted", outdir, asyncio.Semaphore(limit), budget))
+
+
+def test_technical_failure_is_retried_then_flagged(m, personas):
+    s, res = run(first(personas, "Hot"), m, ScriptedModel("left", bad_first=2))
+    assert res.completed and res.format_retries == 2 and res.requests == res.calls + 2
+    s, res = run(first(personas, "Hot"), m, ScriptedModel("left", bad_first=3))
+    assert not res.completed and res.drop_stage == 9 and "QuizQ1" in res.error
+
+
+def test_one_agent_crashing_does_not_stop_the_run(personas, tmp_path):
+    from hotcold.llm import FatalAPIError
+    ps = personas[:6]
+    boom = iter([True, False, False, True, False, False])
+    st = _run_agents(ps, lambda: ScriptedModel(raise_at=(3, ConnectionError("network down")) if next(boom) else None),
+                     tmp_path)
+    lines = [json.loads(x) for x in (tmp_path / "results.jsonl").open()]
+    assert st.done == 6 and st.errors == 2 and sum(r["completed"] for r in lines) == 4
+    assert all("ConnectionError" in r["error"] for r in lines if r["drop_stage"] == 9)
+    # a wrong key stops the run instead of flagging every agent
+    st = _run_agents(personas[6:12], lambda: ScriptedModel(raise_at=(1, FatalAPIError("401"))), tmp_path / "x")
+    assert st.stopped.startswith("fatal") and st.done == 0
+
+
+def test_resume_does_not_repeat_agents(personas, tmp_path):
+    from hotcold.run import Budget, drop_errors
+    ps = personas[:12]
+    st = _run_agents(ps[:5], lambda: ScriptedModel(), tmp_path)
+    st = _run_agents(ps, lambda: ScriptedModel(), tmp_path)
+    ids = [json.loads(x)["agent_id"] for x in (tmp_path / "results.jsonl").open()]
+    assert st.done == 7 and sorted(ids) == sorted(p.agent_id for p in ps)
+    # spending limit: nothing new starts once it is reached
+    st = _run_agents(personas[12:20], lambda: ScriptedModel(), tmp_path / "b", limit=1, budget=Budget(limit=0.0))
+    assert st.done == 0 and st.stopped.startswith("spending limit")
+    # --retry-errors moves technical errors aside so they run again
+    _run_agents(personas[20:22], lambda: ScriptedModel(bad_first=9), tmp_path / "c")
+    assert drop_errors(tmp_path / "c") == 2 and (tmp_path / "c" / "results.jsonl").read_text() == ""
+
+
+def test_provider_limit_is_respected(personas, tmp_path):
+    active = {"now": 0, "max": 0}
+
+    class Counting(ScriptedModel):
+        async def respond(self, *a):
+            active["now"] += 1
+            active["max"] = max(active["max"], active["now"])
+            await asyncio.sleep(0.001)
+            active["now"] -= 1
+            return await super().respond(*a)
+
+    _run_agents(personas[:9], lambda: Counting(), tmp_path, limit=3)
+    assert active["max"] == 3
+
+
+def test_odd_answers_are_kept_and_flagged(personas, tmp_path):
+    from hotcold.personas import demographic_personas
+    from hotcold.run import save
+    ps = demographic_personas(personas[:2])
+    _run_agents(ps, lambda: ScriptedModel(age="-28"), tmp_path)
+    panel, subj = save(tmp_path, ps)
+    assert (subj.q_age == "-28").all() and (subj.chk_age_number == -28).all()
+    assert not subj.chk_age_plausible.any() and not subj.chk_age_matches.any()
+    calls = [json.loads(x) for x in (tmp_path / "calls.jsonl").open()]
+    assert len(calls) == subj.requests.sum() and all(c["ok"] for c in calls)
+
+
+def test_manifest_records_versions(tmp_path):
+    from hotcold.manifest import write_manifest
+    write_manifest(tmp_path, {"model": "anthropic:claude-haiku-5-5", "persona": "demographic"})
+    write_manifest(tmp_path, {"model": "anthropic:claude-haiku-5-5", "persona": "demographic"})
+    m = json.loads((tmp_path / "manifest.json").read_text())
+    assert len(m) == 2  # a resumed run keeps the earlier entry
+    for k in ("code_sha256", "libraries", "data", "system_template", "debrief_screen", "model_settings", "python"):
+        assert m[-1][k], k
+    assert m[-1]["libraries"]["langchain"] and len(m[-1]["data"]["qsf"]["sha256"]) == 64
+
+
+def test_input_audit_catches_planted_problems(m, personas):
+    import pandas as pd
+    from dataclasses import replace
+    from hotcold.audit_inputs import hard_checks
+    from hotcold.personas import DATASET, demographic_personas, load_participants
+    raw = load_participants("baseline").set_index("real_id")
+    ds = pd.read_csv(DATASET, usecols=["experiment", "id", "round", "p1trust"])
+    ds = ds[ds.experiment == "Baseline experiment"].sort_values(["id", "round"])
+    seqs = {i: g.p1trust.fillna(-1).astype(int).tolist() for i, g in ds.groupby("id")}
+    ok = demographic_personas(personas[:3])
+    assert hard_checks("demo", ok, m, raw, seqs) == []
+    bad = [replace(ok[0], override="You are nan, aged 20."), replace(ok[1], age=99),
+           replace(ok[2], override="Your rate is ${e://Field/CRate} aged " + str(ok[2].age))]
+    found = hard_checks("demo", bad, m, raw, seqs)
+    assert any("'nan'" in x for x in found) and any("demographics differ" in x for x in found)
+    assert any("'${'" in x for x in found)
+
+
+def test_analysis_reproduces_paper_table2():
+    from hotcold.analysis import validate
+    assert validate() == []

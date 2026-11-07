@@ -1,0 +1,18 @@
+# API keys
+.env
+
+# Outputs of the runs (archived separately: they are large and contain every conversation)
+runs/
+
+# Downloaded third-party data (see README to download it again)
+data/external/
+
+# Personal working notes, not part of the replication package
+notas/
+
+# Python / tools
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.DS_Store

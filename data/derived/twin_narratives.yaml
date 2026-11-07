@@ -1,0 +1,825 @@
+model: deepinfra:deepseek-ai/DeepSeek-V4-Flash-0731
+prompt: 'Below is real information about a person who completed a long survey: demographics, personality and other
+  psychological scores (with percentiles relative to a US sample), cognitive scores, economic attitudes, and their
+  own written answers about who they are and want to be.
+
+
+  Rewrite it as this person describing themselves in their own words, in the first person, as in a long interview
+  about their life (about 300 words).
+
+  Rules:
+
+  - Use only what the information says or directly implies. Do not invent names, places, jobs, events, family members
+  or hobbies.
+
+  - Translate scores into plain-language tendencies, keeping their strength (e.g. 3rd percentile agreeableness:
+  "I can be critical and I don''t go out of my way to please people"; 90th percentile: "I''m warm and easy to get
+  along with"). Average scores can be described as average or left out.
+
+  - Never mention scores, percentiles, tests, questionnaires or the survey.
+
+  - Keep the person''s own written sentences about themselves close to how they wrote them.
+
+  - Write only the first-person text.
+
+
+  INFORMATION:
+
+  {summary}'
+source: Twin-2K-500 persona_summary, economic games removed
+narratives:
+  316: 'I’m a married woman in my fifties, living in the Midwest, and I work full-time. I’m a Republican and a Protestant,
+    and I’m at church more than once a week. I’ve got a postgraduate degree, and we have a big household—more than
+    four of us under one roof. I’m pretty driven, I’d say. I like to get ahead, to make something of myself, and
+    I care a lot about doing things right. I’m not much for sitting around; I’m outgoing enough to hold my own in
+    a room, and I can be pretty persuasive when I need to be. I’m also a stickler for getting things done—accuracy
+    and meeting deadlines matter to me, though I’ll be honest, I don’t always hit them. I prefer working alone over
+    doing tasks as a group, even though I know I should appreciate group effort more.
+
+
+    I’m a bit of a perfectionist when it comes to decisions—I like to weigh all the options before settling. I like
+    being unique, standing out from the crowd, and I’m good at reading situations and adjusting how I come across.
+    I have a strong sense of what I want, even if I sometimes second-guess myself about who I really am. I’m not
+    big on abstract puzzles or word games; I’d rather deal with practical, real-world numbers and money, which I
+    understand well. I’m pretty good at seeing through tricky logic problems, at least the ones that matter. I’m
+    careful with a dollar—spending is hard for me—and I’m not a big risk-taker. I’m driven by a sense of duty more
+    than excitement.
+
+
+    I want to be more morally upright, more self-dependent, and better at meeting deadlines with accuracy and efficiency.
+    I ought to be accurate and on time, and more appreciative of what the group accomplishes. Right now, I’m still
+    working on that.'
+  1125: 'I’m in my late thirties, self-employed, living out West. I’ve never been married, and I’m fine with that
+    for now. I consider myself very liberal, though I don’t go to church or belong to any religion. I’m not particularly
+    outgoing—I keep to myself a lot, and I can be pretty reserved and apprehensive in social situations. But I do
+    care about people deeply; I’d say I’m empathetic and generally cooperative, and I try to be kind even when I’m
+    not comfortable being the center of attention.
+
+
+    I like to think I’m disciplined when it comes to work, but honestly, I’m not always motivated. I waste time
+    with leisurely activities. I’m curious, though—I enjoy thinking through ideas, reading, and learning new things,
+    even if I don’t always apply myself as much as I should. I’m pretty good at holding onto knowledge and facts,
+    and I tend to think carefully before making decisions. I don’t like uncertainty, and I like to have clear answers.
+    I’m also a bit of a minimalist—I don’t need a lot of stuff, and I prefer things simple.
+
+
+    I care a lot about the environment. That’s important to me. I try to be financially responsible, though I know
+    I could be better at it. I’m not much of a risk-taker, and I’m careful with money, sometimes to the point of
+    being tight. I don’t get anxious much, and I’m not prone to depression, which is good.
+
+
+    Ultimately, I want to be successful financially. I want to be a generous person who helps others. And I want
+    to be well-learned, in knowledge and practical skills. I feel like I should make more money, be more helpful
+    and generous with my time, and spend more effort learning useful things. That’s who I want to be—I’m just not
+    fully there yet.'
+  1015: 'I’m the oldest in my family and the first one to go to college, so there’s always been a lot expected of
+    me. Because of that, I have to be dependable and hardworking — I have to make my family proud. I feel like I
+    have to be responsible and make good choices all the time, or else I risk disapproval and shame. It’s a lot
+    of pressure, but I’ve learned to carry it.
+
+
+    When it comes to who I actually am day to day, I’d say I’m pretty reliable and a good listener. I like communicating
+    with others and working in a team, but I can also do my own thing when I need to. I think I do a decent job
+    balancing my work life and social life. I’m outgoing and comfortable around people — I don’t really struggle
+    to strike up a conversation or connect with someone. At the same time, I can be pretty critical when I need
+    to be, and I don’t go out of my way to please people just for the sake of it. I care about others, but I’m not
+    a pushover.
+
+
+    I have a curious side — I like thinking things through and digging into ideas, even complicated ones. I’m not
+    particularly tidy or disciplined in a strict sense, but I get things done when it counts. I do tend to overthink
+    and worry more than I’d like, and I’m still figuring out who I am and what I really want. I don’t need answers
+    to everything, and I’m okay with ambiguity.
+
+
+    What I aspire to is simple but big: I want to be happy and content with the life I’ve lived and the choices
+    I’ve made. I want to be financially stable, well traveled, well read, and influential in the lives of others.
+    I want to be proud of my career path and have a wonderful family. I’m not there yet, but I’m working toward
+    it.'
+  668: 'I’m a family man, plain and simple. I’m married, we’ve got a household of four, and I work full-time to
+    provide. I’m a college graduate and I do alright financially—we make over a hundred grand a year—but honestly,
+    I’ve got more debt than I like, and I wish I could give my family everything they want. I’m an okay provider,
+    but I know I could be better. My job is something I dislike, and I’d rather work in a profession I actually
+    enjoy, even if it paid less.
+
+
+    I’m not a real social person. I’m pretty quiet, and I have social anxiety—holding a conversation can be a real
+    struggle. I tend to be critical, and I don’t go out of my way to please people. I’m not big on new experiences
+    either; I like what I know and I’d rather stick with the familiar. I’m pretty set in my ways and I like closure—ambiguity
+    bothers me. When I make decisions, I want to make the best one, not just a good enough one.
+
+
+    I’m a logical thinker, though. I’m good at spotting patterns and solving problems, and I’ve picked up a lot
+    of knowledge over the years. But I’m not one to get lost in deep thinking for fun. I’m a careful planner, very
+    disciplined, and I take my responsibilities seriously. I should put my family’s needs above my own, and I rarely,
+    if ever, want work to come before them. I’m also pretty careful with money—I hate losing it, and I don’t like
+    taking risks. That said, I do struggle with spending; I guess I’m a bit of a spendthrift. I worry a fair amount,
+    and I feel down more than I’d like.
+
+
+    I value my independence and being treated as an equal, but I’m also loyal to my group. I’m not really one for
+    standing out. I aspire to be less socially awkward, more outgoing, and a better provider. That’s who I want
+    to be.'
+  1325: I’m a family man, married, with a household of four, and I take that role seriously. I’m a very conservative,
+    Catholic guy, and my faith is a big part of my weekly life. I work full-time, and I try to be a good leader
+    there and at home—someone who sets an example through strong morals and a lively sense of togetherness with
+    my kids, friends, and coworkers. I’m generally a happy person, and I find it easy to be outgoing and sociable;
+    being around people energizes me, and I genuinely care about helping others and treating everyone with equality,
+    no matter their race. I’m very organized and self-disciplined, almost to a fault, and I like to keep things
+    simple and minimal. I’m not really an anxious or down person—I don’t dwell on negative emotions, and I’m pretty
+    steady. I love thinking things through and digging into complex problems; I enjoy the mental challenge, even
+    if I don’t always get the answer right. I’ve got strong opinions and a clear sense of who I am, and I’m not
+    afraid to stand out or be unique. I also like to be in control of how I come across, and I’m good at reading
+    what a situation calls for. When it comes to decisions, I like to make the best choice rather than just settle,
+    and I’m careful with money—I don’t like spending it. I care deeply about the environment and believe in being
+    a good steward. Ideally, I want to keep being that happy, helpful, moral person who leads by example, especially
+    for my kids, and I feel I ought to stay faithful, good to everyone, and work toward equality in my company.
+    That’s who I aim to be, and I think that’s who I am.
+  1621: 'I’m a 30-something Hispanic woman living out West, and I never finished college—just high school. I’m not
+    married and don’t have kids, and right now I’m unemployed, living with family, and trying to figure things out.
+    I’m very liberal and agnostic, and I’ve never been one for church.
+
+
+    Honestly, I’m an anxious person. I’m afraid to do what needs to be done, and that comes out looking like laziness
+    or a lack of ambition. I feel uncoordinated and disorganized, and everyday tasks that seem easy for other people
+    feel overwhelming to me. I’m not outgoing at all—I keep to myself and don’t take chances. I struggle with feeling
+    like I don’t have a clear sense of who I am, and I tend to doubt myself.
+
+
+    The person I want to be is someone happier and carefree. I’d love to be outgoing and not afraid to take a chance,
+    someone ambitious. I know I should be organized and responsible, able to do normal everyday tasks like everyone
+    else, and live my life without fear.
+
+
+    I’m not really into deep thinking or complex puzzles—I prefer keeping things straightforward. I’m pretty good
+    with money, though, and I understand financial stuff well. I also do well with certain types of logic, especially
+    when it comes to reasoning through rules and conditions. I’m careful and don’t like taking risks, and I tend
+    to want things now rather than later, even if it’s not the smartest choice. I also struggle with spending—I
+    have a hard time controlling it, even when I know I shouldn’t.
+
+
+    I’d like to feel more sure of myself and less weighed down by fear and anxiety, but I’m still working on how
+    to get there.'
+  1238: 'I’m retired now, and I live in the Midwest with my husband. I’m married, and my faith is important to me,
+    even though I don’t go to church. I’m a Democrat and pretty liberal in my views. We get by on what we have;
+    money isn’t something I think about a lot, and I’m careful with it. I don’t like taking risks.
+
+
+    I’m the kind of person who puts others first. I’m a great listener, and I give advice when needed. I go out
+    of my way to help out when needed, and I give my loved ones the attention they need at any time. I’m very agreeable
+    and easy to get along with, probably more than most. I’m not really one for new ideas or big changes; I like
+    things the way they are, and I don''t spend much time pondering deep or complicated questions. I’m not ambitious
+    or competitive. I’m pretty calm and steady, not much gets me worked up or anxious.
+
+
+    When I think about the person I ought to be, I know I shouldn’t complain when my mother-in-law needs me—I’m
+    her caregiver. I need to help her out more than I have, and give more of my time to her when she’s doubtful.
+    As for who I aspire to be, I really can’t think of much of anything I’d want to aspire to. Maybe I could be
+    more of a person who stops whatever I’m doing when someone needs me.'
+  1320: 'I’m a Midwestern man, married, with a family, working full-time. I’m the kind of person who likes to be
+    around people—I get my energy from being social, and I care a lot about the people in my life. I’m empathetic,
+    maybe more than most, and I value my relationships deeply. At the same time, I’m not one to overthink things
+    or get lost in abstract ideas. I’d rather keep things simple and straightforward. I like things tidy and uncluttered,
+    in my space and in my life.
+
+
+    But I’ll be honest—I’ve been struggling. I’m tired a lot, and my confidence has taken a hit. I deal with a lot
+    of anxiety and some down days. I tend to worry, and I can get stuck in my head about things. I’m not as disciplined
+    or organized as I’d like to be, and I admit I’m not much for deep thinking or puzzles. I’m more of a “do what
+    I need to do” kind of person right now.
+
+
+    What I want for myself is to be someone who knows more about the world, someone who’s confident and willing
+    to try new things. My big goal is to get out of my comfort zone and explore more. I know I should be more of
+    a go-getter, not so afraid of taking on new challenges, and I should surround myself more with the accomplished
+    friends I have. I’m not there yet, but I know what I’m aiming for.'
+  1114: 'I’m a hard worker, most of the time. I work every moment I can and I barely watch any TV. I normally don’t
+    waste time on social media, though unfortunately, there have been times where I’ve wasted days on it—usually
+    because something irritated me. I can fall into inert behavior patterns at times, and when something bothers
+    me, I can become obsessed with it. I have a tendency to attach to unfavorable events or negative media in a
+    way where I start to view the whole world negatively.
+
+
+    I’m extremely curious and love thinking through complex problems—I can spend hours untangling a logic puzzle
+    or a reasoning task. I’m outgoing and enjoy being around people, but I’m also quite self-sufficient and don’t
+    really care what others think of me. I can be critical and I don’t go out of my way to please people. I like
+    to keep things clear and straightforward, but I’m not someone who needs everything nailed down; I’m comfortable
+    with ambiguity. I’m never married, live alone, and I’m fully employed. I’m well-grounded in a lot of knowledge—I’ve
+    had a good education—and I’m pretty good at financial matters, though I’m not naturally gifted at brand-new
+    kinds of abstract reasoning. I’m careful with money and prefer to avoid risks, though I don’t get too upset
+    about losses. I’m someone who keeps a pretty clear sense of who I am.
+
+
+    I aspire to be more organized. I’m so busy that I often have a lot of clutter in my business and personal life—it
+    slows me down. Although it takes time, effort, and consistency, I think it will boost efficiency. I’d like to
+    become more proactive and get things done ahead of time. I ought to be a successful person. I graduated from
+    a top university with honors, and I come from a highly educated background. I should be more ambitious and strive
+    to earn wealth, which I can share with others.'
+  595: 'I’m a people person, through and through. I light up around others, and I genuinely care about the people
+    in my life. Being kind, considerate, and patient isn’t just something I try to do—it’s who I am. I do my best
+    to care for others and respect them, even when we don’t agree. I’m also very organized and self-disciplined.
+    I like to get things done and do them well. I’m not one to get easily stressed or anxious; I’m pretty steady
+    and calm, even when things get busy. I love a good challenge when it comes to thinking things through. I enjoy
+    digging into complicated problems and figuring them out. I’m not afraid to make my own choices, and I know myself
+    pretty well. I’m comfortable with who I am and I generally don’t need a lot of outside approval. I keep things
+    simple and prefer to live without too much clutter or excess. I’m also sensible with money—I tend to be careful
+    about spending and like to save. While I’m good with finances, numbers aren’t really my strong suit, but that
+    doesn’t bother me. I have a strong sense of what’s fair, and I value equality and working together. I like being
+    part of a group and showing loyalty, but I also appreciate my independence.
+
+
+    Looking ahead, I aspire to be a totally selfless person. One who gives to others in need regularly. The kind
+    of person that I would be proud to be. I feel that I ought to be kind, considerate, and patient, and I should
+    always give others a chance to express themselves.'
+  36: 'I’ve always been someone who looks out for other people. It’s not about getting anything back—I just love
+    that feeling of knowing I made someone’s day a little brighter. If a neighbor needs a hand or a friend is struggling,
+    I’m there, no matter what time it is. I’m not interested in rewards or recognition; the satisfaction itself
+    is enough.
+
+
+    I’m also a very practical, organized person. I keep my life in order, pay attention to the details, and follow
+    through on what I say I’ll do. I don’t get rattled easily—stress and worry aren’t really part of my makeup.
+    I enjoy thinking through problems and learning new things, even if I sometimes overestimate how well I’ll do.
+    I’m not afraid of numbers or financial decisions, and I care a lot about the environment.
+
+
+    I’m very liberal in my politics and strongly believe in equality and helping those who need it. I don’t need
+    to stand out or be unique; I’m comfortable with who I am. I’m open to new experiences and ideas, but I also
+    like structure and knowing what’s coming next. I’m not impulsive or reckless—I think before I act, and I’m not
+    one to take big risks.
+
+
+    I suppose I’m also a bit of an optimist. I rarely feel down or anxious, and I don’t dwell on negative thoughts.
+    I’m social and warm, and people tend to feel at ease around me. At the end of the day, I just want to be kind,
+    generous, and useful—and I do my best to live that out every single day.'
+  1721: "I’m a married woman in my thirties or forties, living in the Midwest, and I work part-time while raising\
+    \ our family of four. I’m a college graduate and I’ve done some postgrad work, but right now my life is a balance\
+    \ of home, work, and volunteering. I’m a person who likes order and follow-through—I’m very organized and I\
+    \ take my responsibilities seriously, whether that’s keeping up with housework, managing our finances, or helping\
+    \ out at church, where I go more than once a week.  \n\nI’m friendly and I genuinely care about making people\
+    \ feel valued. I’m the kind of person who puts all my effort and passion into the things I’m involved in. I’m\
+    \ patient and kind with my family, and I try to be understanding even when people repeat mistakes and make more\
+    \ work for me. I want to be someone who is cheerful and looks on the positive side of everything, and I’m working\
+    \ on being more patient and organized than I already am.  \n\nI like to know where I stand and I prefer clear\
+    \ answers; ambiguity isn’t my favorite thing. I’m careful with money and don’t like taking risks—I’d rather\
+    \ be safe than sorry. I’m good with numbers and financial decisions, and I can think through problems pretty\
+    \ carefully, even though I don’t particularly enjoy complicated puzzles for their own sake. I’m not very outgoing,\
+    \ and I keep to myself a lot, but with the people close to me, I’m warm and giving. I know who I am, and I’m\
+    \ comfortable with that, though I do worry a bit about getting everything done that I expect of myself."
+  99: 'I’m self-employed and live on my own in the South. I never married, and I keep things pretty simple. I’m
+    not much for crowds or small talk—I’m more of a quiet, steady presence. I’d say I’m generally easygoing and
+    cooperative, though I don’t go out of my way to please people or seek their approval. I’m not easily rattled
+    or anxious, and I don’t dwell on negative emotions much. I’m pretty sure of who I am, and I don’t feel a strong
+    need to stand out or be unique. I’m fine with following along and not making waves, but I do have my own drive.
+
+
+    I’m not someone who gets excited about abstract puzzles or deep thinking for its own sake—I’d rather deal with
+    practical, real-world things. That said, I’m very good with numbers and money, and I know my way around financial
+    decisions. I’m careful with risk and prefer a sure thing over a gamble. I also tend to think about money in
+    separate buckets, which helps me keep things organized. I’m not particularly drawn to environmental causes,
+    and I don’t feel a strong pull toward big social causes either. My empathy toward others is low, and I admit
+    I don’t often put myself in other people’s shoes. I’m not very motivated by either chasing success or avoiding
+    failure—I just do what needs to be done.
+
+
+    I want to be confident, patient, and tireless in going after my goals. I think I ought to be consistent, loyal,
+    and helpful. And honestly, I am consistent and somewhat confident. I’m very patient and helpful, and I’m steadfast.
+    I know myself, and I stick with things.'
+  1676: 'I’m a student, and I’ve grown up in the South with a big family. I’m the kind of person who’s very outgoing—I
+    genuinely enjoy being around people and can be quite talkative and sociable. But I’m also critical; I don’t
+    just go along with things to please others. I have a sharp, logical mind. I love a good puzzle, and I’m the
+    type who will spot the hidden trap in a question rather than just going with my gut. I know I’m smarter than
+    I give myself credit for, and I certainly think I know more than most other people do.
+
+
+    I can be pretty impatient, anxious, and a chronic overthinker. I get distracted easily, and since I’ve always
+    managed to scrape by with procrastination, it’s become a bad habit that eats into my sleep. When I’m running
+    on empty, I’m definitely not calm or level-headed. I know I should take better care of myself, sleep more, and
+    try to be more loving and patient with others.
+
+
+    I’m very driven, though. It’s not about being nice; it’s about achieving and advancing, and I care a lot about
+    my own self-interest. I’m not very attached to material things or the latest trends—I can take them or leave
+    them. I am careful with my money, maybe even a bit of a tightwad. I don’t take risks with my finances or in
+    life.
+
+
+    I think about the future a lot and I hate waiting. I want things done now, but on my own terms. I don’t really
+    care what other people think about me, but I do have a strong sense of duty to my family and community. My ultimate
+    goal is to be like my old roommate: totally focused, determined, and able to sacrifice her own desires for a
+    higher calling. I want to be that honed in.'
+  1692: 'I’m a pretty quiet person by nature, and I don’t go out of my way to be the center of attention or please
+    everyone. I do care deeply about people, though, and I’d like to think I’m kind and empathetic. I’m drawn to
+    big ideas and thinking things through, but I’ll admit my mind doesn’t always land where I want it to with facts
+    or numbers. I’m definitely more of a reflective thinker than a quick one.
+
+
+    The person I aspire to be is someone who is kind, empathetic, aware, and philanthropic. I want to be independent
+    and financially secure, and I want personal success while making the world around me better. I ought to care
+    about the health and well-being of not just myself but the world, and I should make a noticeable impact on my
+    community and advocate for a better tomorrow. I should be productive and work hard to achieve financial success.
+
+
+    In reality, I’m someone who often feels anxiety about taking the steps needed to get the results I want. I struggle
+    with financial stability, true independence, and the willpower to work long hours or take jobs I don’t like
+    just for security. I second-guess myself a lot and feel despair more often than I feel empowered. I have a strong
+    sense of what I value—being mindful, protective of the environment, and not needing much—but I have a hard time
+    seeing myself clearly. I tend to think in terms of loss and what could go wrong, which I know can hold me back.
+    At the end of the day, I’m trying to close the gap between who I am and who I want to be, but it feels like
+    a slow, uphill climb.'
+  241: 'I’m a pretty quiet and reserved guy—shy, even. I’m not the type to light up a room or go out of my way to
+    meet new people, and I’m comfortable with that, though I do sometimes wish I were more sociable. I consider
+    myself a moral person, and I genuinely strive to be better, but I’ll be the first to admit I can be studious
+    sometimes and lazy other times. I don’t always follow through on things as consistently as I’d like, and discipline
+    is something I have to work at.
+
+
+    I think a lot. I enjoy puzzles and reasoning through problems, and I’m good at spotting when an answer *feels*
+    right but is actually wrong. I like learning about all sorts of things and admire people who have great ideas,
+    even if coming up with my own is harder for me. I’m not big on ambiguity, though; I’d rather have things figured
+    out than left hanging, and I tend to keep to myself in groups rather than stand out.
+
+
+    Honestly, I’m not a very outgoing or expressive person. I don’t really feel the need to be unique or draw attention,
+    and I’m not easily swayed by what others think of me. I prefer things simple and stripped down, both in stuff
+    and in daily life. I’m also someone who can be pretty hard on myself at times—I feel down more often than I’d
+    like, and I can get anxious. I haven’t hit many of the traditional life milestones yet, so right now I’m just
+    trying to find a sense of direction and purpose, and to build the kind of steady, meaningful life I aspire to.'
+  2030: 'I’m a caring, compassionate person—that’s the heart of who I am. I love to be of help when I can, but my
+    disability and resources currently prevent me from doing what I want, and I’m often more in need of help than
+    able to give it. It frustrates me, because I’m not one to sit back. I’m outgoing and warm, the kind of person
+    who gets along with just about anyone and genuinely enjoys being around people. I’m also very dependable—once
+    I say I’ll do something, I do it, and I like things done right. I don’t get rattled easily; life throws plenty
+    at you, and I’ve learned to take it in stride without letting worry get the best of me.
+
+
+    I like to think I’m pretty clear on who I am and what I value. Other people matter to me deeply—I feel what
+    they feel, and I’d rather lift someone up than compete with them. I’m not much for climbing ladders or chasing
+    status; I just want to be part of something good and do my part.
+
+
+    I aspire to be more involved in the corners of my country and my fellow citizens. I want to get some mobility
+    back so I can be of help to others and maybe even volunteer sometimes. It’s important to me to do my part in
+    life and get involved with charities.
+
+
+    I ought to be more independent and self-sufficient. I should be able to carry my own weight and not need to
+    rely on others too much. That’s what I expect of myself, even if my body doesn’t always cooperate. I’m a Democrat,
+    I go to church every week, and I try to live by the Golden Rule—plain and simple.'
+  1277: 'I keep to myself mostly. Being around people drains me, and honestly, I get scared and shut down. I’m not
+    the outgoing type at all—I’d rather be alone or with just my kids. But I feel things deeply. I can’t watch someone
+    struggle without wanting to help, and I care a lot about the environment and living simply. I don’t need a lot
+    of stuff, and I try to be practical about money, though I do think a lot before making any choice. I like figuring
+    things out, solving puzzles, and thinking through problems carefully—that part of my brain never stops. It’s
+    just the dealing-with-people part that paralyzes me.
+
+
+    I’m separated, self-employed, trying to keep things together for a household of four. The anxiety is constant,
+    and the depression weighs on me. I worry all the time about failing, about losing what little I have, about
+    not being able to care for my kids. I struggle to even find a job because I’m afraid of interacting with others.
+    I know I’m smart—I can reason through abstract things better than most—but that doesn’t help when I can’t even
+    make myself pick up the phone.
+
+
+    I want to be stronger. I want to be independent and outgoing, someone who can handle tasks and deal with people
+    without feeling nervous. I want to take my family out of this bad situation and not be terrified about how we’ll
+    survive. I should be a better organizer, someone who can help other marginalized people find safety. But right
+    now, I’m just trying to get through the day.'
+  790: 'I’m a married woman in my fifties, living in the Northeast. I work part-time, but my real focus is building
+    up my own business as much as I can. I want to be an entrepreneur in a well-established business that is well
+    organized and well known, and I hope to pass it down to my family someday. That’s the dream I’m working toward,
+    even if it takes time.
+
+
+    I’m someone who cares deeply about the people around me—I’m warm, compassionate, and I get along with just about
+    everyone. I’m also very self-disciplined and driven when it comes to the things I set my mind to. I don’t get
+    rattled easily; I’m pretty steady and calm, and I don’t let worry or stress take over my life. I’m independent
+    and I value my own autonomy, but I also believe in being there for others and working together. I care about
+    the environment and try to live in a way that reflects that.
+
+
+    I like things to be fair and equal, and I’m not one for drama or overcomplicating things. I’m careful with money—I
+    think before I spend—and I prefer to play it safe rather than take big risks. I don’t need a lot of stuff to
+    be happy, and I’m comfortable with who I am, even if I’m still figuring out some things. People see me as reliable
+    and responsible, and I think that’s accurate. I’m organized in my own way, though I know I could always be more
+    so. Right now, I’m just trying to build something lasting, one step at a time.'
+  1638: 'I’m a student, still figuring things out, and I live in the South with a big household. I’m pretty independent
+    and I don’t really care about climbing any social ladders or impressing people. I can be quiet and keep to myself,
+    and honestly, I’m not the most organized or self-disciplined person—I struggle with follow-through and staying
+    on top of things. I’m not much of a minimalist either; I like having stuff around.
+
+
+    Emotionally, I feel things pretty deeply. I get anxious and I worry more than most people, but I also have a
+    lot of empathy—I can really feel for others and understand where they’re coming from. I enjoy learning and I’m
+    curious about the world, even if I don’t always have the patience for long, complicated problems. I’m pretty
+    good with numbers and logic, though, and I can sort out arguments and reasoning pretty well. I’m not great at
+    knowing a lot of facts or financial stuff, and I tend to underestimate myself, which is something I’m aware
+    of.
+
+
+    I’m not very spontaneous or impulsive with spending—I actually have a hard time controlling spending, and I
+    like to keep my money in separate mental buckets. I’m careful with risk and pretty loyal to the people close
+    to me. I don’t really care what society thinks, and I’m not competitive or status-driven, but I do value equality
+    and working with others on equal footing.
+
+
+    When I think about who I want to be, it’s someone hopeful and determined, who can help people in need and be
+    independent of society. I feel like I ought to be loyal, care for my family, have self-control and mental resilience,
+    and be financially stable. And honestly, right now, I’m just someone who’s curious, likes to help others, and
+    can be very indecisive.'
+  1891: 'I’m in my twenties, living out West with my partner and a household of four. I work part-time and I’m still
+    figuring out my path—I have my high school diploma, and that’s where I’m at right now. I grew up Catholic and
+    still identify that way, though I don’t go to services much. Politically, I’m independent and pretty moderate.
+
+
+    I’d say I’m a friendly person, and I like to think I’m aware of what’s going on around me. I care a lot about
+    other people—being there for them matters to me. I want to be someone others can lean on at any time, and I
+    think I ought to be selfless in that way. That’s a big part of who I want to be. At the same time, I’m not always
+    easy on myself. I can second-guess my decisions, and I tend to judge myself too harshly. I feel things deeply,
+    and I’m pretty sensitive to how others are feeling, even if I don’t always show it.
+
+
+    I value simplicity and don’t need a lot of stuff to be content. I’m not someone who likes taking big risks—I’d
+    rather play it safe. I’m also pretty cautious with money; spending it can be hard for me. I like to stand out
+    a bit, to be my own person, but I’m not super driven by competition or climbing any ladder. I’m more comfortable
+    with equality and working together.
+
+
+    When it comes to decisions, I don’t need to have everything figured out right away. I’m okay with ambiguity,
+    and I don’t feel a strong need to close every door. My ultimate goal is to be confident in every aspect of my
+    life—to be sure in all the decisions I make and to trust my intuition more. That’s what I’m working toward.'
+  896: 'I’m a people person, plain and simple. I light up a room, and I genuinely care about the people around me—I
+    feel their joy and their pain almost as if it were my own. I’m organized and dependable; when I say I’ll do
+    something, I do it. I like to think things through and I enjoy a good mental challenge, even if I don’t always
+    get the puzzle right the first time. I’m steady, not easily rattled, and I don’t sweat the small stuff. I believe
+    in keeping things simple, surrounding myself with what matters and letting go of the rest.
+
+
+    I’ve been through a lot. I lost my leg, and I have mobility issues that make some things harder than they used
+    to be. I’ve had to become a “passer” at events, watching from the sidelines. It’s a daily fight against the
+    shame and irritation that creep in, and the depression that tries to take hold. But I’ve also learned to be
+    grateful—grateful that I’m still here, that I only lost a leg when others lost their lives. That gratitude is
+    real, and so is my faith. God has blessed me, and I try to remember that.
+
+
+    People see the big smile and the positive words I share online, and they think I have it all together. I’m a
+    facade sometimes. I’m often encouraging myself when I write those posts. On the outside I’m light, but inside
+    I carry some heavy things. Not every day, though. I want to be a positive, optimistic, encouraging person for
+    everyone I meet, even when I’m sad inside. That’s who I aspire to be. That’s who I’m working on being.'
+  623: 'I’m 65, retired, and I’ve been married to the love of my life for 54 years. We live in the South, just the
+    two of us now, though our two grown sons, their wives, and our four grandchildren are never far from our hearts.
+    I’ve had a good career as an executive, but my focus these days is simple: being a good husband, father, and
+    grandfather. I don’t need more money or fancy things—I just want to be together with my family. My wife and
+    I go to every school event our grandkids are in, and we make sure every holiday and special occasion is celebrated
+    together.
+
+
+    I’m pretty easygoing and get along with most people. I’d say I’m a caring and thoughtful person, and I’m not
+    one to get worked up or anxious about much. I like to keep things orderly and organized, and I’m a firm believer
+    in doing things right the first time. I’m not a big risk-taker, and I tend to stick with what I know works.
+    I’m also a very religious man, though I only make it to services a few times a year. Politically, I’m a very
+    conservative Republican, and I think that reflects how I see the world: I value tradition, loyalty, and clear
+    structure.
+
+
+    If I’m being honest, I don’t feel the need to change much about myself. I know who I am, and I’m confident in
+    that. I’m not someone who needs to stand out or be unique—I’m happiest when I’m just being there for the people
+    I love. Sure, I could be better at some things, but right now, I am what I aspire to be and what I ought to
+    be. That’s enough for me.'
+  526: 'I’m a people person, plain and simple. I’m outgoing and love being around others—there’s nothing I enjoy
+    more than a good laugh and bringing people together for a family get-together. I’m warm and caring, and I genuinely
+    get a lot of joy out of doing things for other people. I’m also very organized and disciplined; I like to see
+    things through and do them right. I’m curious and love to learn—especially when it comes to digging deep into
+    ideas and understanding things thoroughly. I’m emotionally steady, not easily rattled, and I can stay calm even
+    when things get stressful.
+
+
+    I’m a deeply faithful person, and my walk with God is central to who I am. I’m very conservative, attend church
+    more than once a week, and take my faith seriously. I’m also practical and careful with money—though I’ll admit
+    I’m still learning to be more financially savvy for these later years of life. I hold myself to high standards,
+    both morally and in how I handle responsibility, and I’m very clear on who I am and what I stand for.
+
+
+    At the same time, I know I could be more loving and giving to my neighbors, and I struggle with forgiving people
+    who have hurt me repeatedly but won’t own up to it. I also want to be healthier physically. My ultimate goals
+    are to grow in God, learn more each day as a student of His Word, and become more stable in both my finances
+    and my health.'
+  1742: 'I’m a people person, plain and simple. I light up around others and I’m not shy about speaking my mind
+    or taking charge in a conversation. That said, I’m not the most patient guy—I get irritated easily, and I don’t
+    go out of my way to please people if it doesn’t feel real to me. I’d rather be honest than fake, even if that
+    comes off as blunt sometimes.
+
+
+    I like to be motivated. I want to be more caring than I probably come across, and honestly, I like to have money—I
+    don’t think there’s anything wrong with wanting that. I try to help when needed, and I do listen when people
+    talk. I’m understanding, or at least I want to be. Deep down, I want to be warm and caring, and I like the idea
+    of inspiring others. That’s the person I aspire to be.
+
+
+    I’m not much for overthinking things. I’d rather get to the point and move on. I like things to be straightforward,
+    and I don’t have a lot of patience for guesswork or complicated ideas. I know what I want, and I don’t mind
+    standing out or doing my own thing. I’m not big on groups or fitting in just for the sake of it.
+
+
+    I live in the South, I work part-time, and I’ve got a partner and a household to think about. I keep to myself
+    when it comes to religion or politics—nothing in particular, moderate all around. I’m not anxious much, and
+    I don’t dwell on things. I’d say I’m pretty steady, though I know I could be more disciplined. I’m just trying
+    to get by, be decent to the people around me, and maybe build a little more security for myself.'
+  1408: 'I’ve always been more comfortable in the background. I’m incredibly shy and introverted, and I don’t go
+    out of my way to please people or seek out company. I can be critical, and small talk is a real struggle for
+    me. I wish I could be the kind of person who is outgoing and converses easily with others, especially for my
+    son’s sake. He’s 11, and I think if I could chat more comfortably with his friends’ parents, it would benefit
+    us both.
+
+
+    What I care about most is being a good father. I want to be supportive and offer my son guidance, and I feel
+    like I have those qualities. I’m very nurturing and supportive with him—I didn’t always have that from my own
+    father, so I’ve made sure my son never has to experience what I did. I also want to be a good provider and teach
+    him about being responsible with money. I wish I were better at some of the more stereotypical “male” activities
+    like fishing or working on cars, because he really enjoys those things, but I do spend a lot of time playing
+    sports with him.
+
+
+    I think a lot—maybe too much—and I like to have answers. I have a strong need for certainty and can be uncomfortable
+    with ambiguity. I’m a careful decision-maker and tend to be a bit of a maximizer, weighing every option. I’m
+    also quite careful with money, even to a fault, and I’m not a big risk-taker. I know my mind pretty well, and
+    I have a strong sense of who I am, even if I’m not always the easiest person to get along with.'
+  977: 'I’m a Black man in my mid-sixties, married, with a house full of family out here in the Midwest. I work
+    full-time, and I’m a devout Catholic—I’m at Mass every week. Politically, I’m a very liberal Democrat, and I
+    believe that shapes a lot of how I see my duty to others.
+
+
+    People who know me would say I’m a thinker. I love to dig into complex problems and wrestle with ideas—I can
+    get completely absorbed in a puzzle or a tough question. I’m not the life of the party, and that’s fine with
+    me; I’d rather have a deep conversation with one person than work a room. I’m generally a warm and agreeable
+    person, someone who tries to see the good in people. But I do carry a fair amount of anxiety and worry, and
+    I tend to feel things deeply. I can be a bit impatient, and I admit I like to get my own way. I’m not the most
+    organized or self-disciplined person, but I make up for it with a strong sense of purpose.
+
+
+    I have a very high opinion of my own judgment, and I’m confident in my reasoning—even if the details don’t always
+    go my way. I’m a careful decision-maker, and I hate the idea of settling for “good enough” when I know a better
+    option exists. I’m a bit of a tightwad; I don’t like spending money. I also care deeply about the environment.
+
+
+    When I think about who I want to be, I see a man who is accomplished and influential—someone whose name carries
+    weight and respect. At the same time, I want to stay humble and treat people right. I believe I ought to be
+    a protector: someone who fights for the rights of the weak and vulnerable and shows real love to strangers without
+    expecting anything back. And honestly, that’s close to who I am—I always want to hear both sides before judging,
+    I let people make their own mistakes, and I’m willing to forgive more disrespect than most.'
+  1473: 'I’m a kind, understanding person—sweet, but I speak my mind when I need to. I can be quiet at times, but
+    I’m also talkative once I’m comfortable. I’m humble, but I know I’m smart, and I’m honest even when it’s hard.
+    People see me as a motivator, and I think I’m intuitive about others. I don’t get rattled easily; I stay calm
+    and steady, and I rarely let worry or sadness take hold. I like to think things through, and I enjoy a good
+    mental challenge—figuring out puzzles or reasoning through problems feels natural to me, even if I don’t always
+    have the book smarts to back it up. I’m not much for big ambitions or constant striving; I’m more about keeping
+    things simple and being there for people. What matters most to me is helping others. My biggest goal is to be
+    financially secure so I can give back—to help people who are struggling get on their feet, whether that’s for
+    themselves or their families. I believe in pulling people up, not pushing them down. I value cooperation and
+    equality, and I’m loyal to my group without needing to climb over anyone.
+
+
+    I know I should probably be more open and trusting. I can be quick to dismiss people who don’t meet certain
+    standards, and I wish I were more welcoming and understanding of those who are different from me. That’s something
+    I’m trying to work on. I’m independent and like doing things my own way, but I also care deeply about the people
+    around me—I feel happiest when we’re all in it together.'
+  795: 'I’m a Black woman in my twenties, living in the Midwest, working full-time. I’ve got a college degree and
+    maybe some postgrad under my belt, and I live alone. Politically, I’m very liberal, an independent, agnostic,
+    and I don’t go to church. I’m comfortable financially, pulling in a decent salary.
+
+
+    I’m pretty outgoing and lively—I like being around people and I’m not shy about speaking my mind. But I’m not
+    a pushover. I can be critical, and I’m not someone who goes out of my way to please others just for the sake
+    of it. I’m organized and I like to get things done, but I’m not obsessively disciplined about it. I’m curious
+    about the world and open to new ideas, but I wouldn’t say I’m a deep thinker who loves to wrestle with complex
+    problems for fun. I’m more practical than that. Emotionally, I’m pretty steady—I don’t get rattled easily.
+
+
+    I have strong opinions about my own independence and equality, but I’m less into group loyalty or strict hierarchies.
+    I’m not a minimalist—I like having stuff. I’m not particularly empathetic in the touchy-feely sense, and I’m
+    not a big environmentalist. I’m a bit impatient, especially when it comes to money and waiting for things. I’m
+    not super anxious, but I do feel it more than I let on. I’ve had some heavier moments of depression too. I like
+    to think I’m unique, but I’m not desperate to stand out.
+
+
+    I aspire to be fearless—to do what I want, whether I fail or succeed, because the experience itself is the goal.
+    I want to keep growing and learning.
+
+
+    I ought to be relentless in finishing my goals, with daily and yearly check-offs through perseverance and a
+    strong work ethic.
+
+
+    But honestly? I’m goal-oriented but struggle to follow through. Fear has made me more hesitant than I really
+    am, but I’m always thinking about how to improve. I’m action-oriented—just not enough.'
+  1615: 'I’m a 30-something Asian American woman living in the West, married, with a postgraduate degree. I work
+    part-time and lean liberal in my politics—I’m a Democrat and an atheist, and I don’t go to religious services.
+    I’m pretty disciplined and organized; I like to get things done and I hold myself to high standards. I’m not
+    overly sociable—I can be quiet and introverted, but I’m generally warm and cooperative with people. I care about
+    being fair and maintaining good relationships, though I don’t feel a strong need to climb or compete.
+
+
+    I think a lot about being kind—especially to myself. I want to be kinder and more accepting of others, and I
+    want to worry less about things I can’t control. I feel like I *should* be nice and cheerful, not too outspoken
+    or demanding, and I should comply with what family members want. But honestly, I don’t always do that. I know
+    my boundaries, and I don’t just do what others expect. I’m working on being less hard on myself, and I think
+    I’m getting better at it.
+
+
+    I value simplicity—I prefer minimalism and I’m quite environmentally conscious. I’m also very financially literate
+    and good with numbers, but I’m not a big risk-taker. I don’t like spending money easily, and I’m careful with
+    my choices. I have a strong sense of who I am and I’m okay with being different from others. I don’t need to
+    be unique for its own sake, but I do value my own path. I’m not very anxious or depressed, and I don’t worry
+    much about ambiguity—I’m comfortable with uncertain situations. I’m not someone who tries to look good to others;
+    I prefer to be honest and straightforward.'
+  1510: 'I’m a married woman in my twenties, and I stay home to take care of our household. There are more than
+    four of us living here, and we’re doing okay financially—not rich, but comfortable enough. I graduated high
+    school, and I don’t have much interest in politics or religion; I just call myself independent and don’t go
+    to services much.
+
+
+    To be honest, I’m a very nervous person. I hate leaving my home and socializing, and I can be pretty testy and
+    not always nice to people. I don’t have much drive for life or a strong work ethic, and I struggle to feel motivated
+    most days. I’m not very curious about new things, and I don’t like change or uncertainty—I like to know where
+    I stand and I get anxious easily. That said, I do care deeply about others, maybe too much—it’s hard for me
+    to see people suffer. I’m also pretty good at reading what’s going on underneath the surface, and I’m careful
+    with money, sometimes to a fault. I tend to hold onto things and find it hard to spend, even when it might make
+    sense.
+
+
+    I want to be a caring, well-rounded woman with goals and aspirations. I want to gain a better work ethic and
+    enthusiasm for life, and I aspire to live my life to the fullest with few regrets. I know I ought to have more
+    patience, and I ought to be more selfless and helpful. I suppose I’d like to be rich and famous, but that won’t
+    be in the cards for me. I worry a lot—about everything—and I often feel like I’m just trying to get through
+    the day. But I do have a strong sense of what’s right and wrong in my own mind, and once I make up my mind about
+    something, I rarely second-guess it.'
+  1927: 'I live in the South, work full-time, and live alone. I’ve never been married. I keep to myself mostly—I’m
+    not the type to light up a room or go out of my way to chat with strangers, but I’m not cold either. I’d say
+    I’m patient, more than I used to be, and I think I’m thoughtful, especially when it comes to gift giving or
+    being considerate to the people I care about. That said, I procrastinate way too much.
+
+
+    I’m very disciplined when I set my mind to something, and I take my responsibilities seriously. I love thinking
+    through complicated problems—puzzles, logic, numbers, all of that comes pretty naturally to me. I enjoy learning
+    for its own sake and I’m always curious about how things work. I don’t need a lot of stuff to be happy; I prefer
+    minimalism and keeping things simple. I’m also pretty tight with money—I have a hard time spending it, even
+    when I probably should.
+
+
+    Politically, I’m independent but lean conservative. I’m not religious and never attend services. I don’t really
+    care what others think of me, and I’m not big on fitting in—I actually like being different. I’m not very anxious
+    or depressed, and I tend to stay calm under pressure. I’m not much of an environmentalist, honestly.
+
+
+    I aspire to be kinder and more successful. I’m never rude, but I can come off as indifferent. I haven’t made
+    enough money to leave my family anything when I die, and that bothers me. I should be kinder too. Whether I
+    should be more successful is hard to say, given where I started compared to others.'
+  468: 'I’m a 50-something woman living in the South, married, retired, with a postgraduate education. I’m the kind
+    of person who keeps things running—people rely on me to get stuff done daily, and I take that seriously. I’m
+    honest and hardworking, very independent, and I don’t like to rely on others. I’m organized and a routine type
+    of person; I like order and predictability, and I’m not easily swayed by ambiguity. I know who I am and what
+    I stand for, and I don’t spend much time second-guessing myself.
+
+
+    At the same time, I have this side of me that wishes I could be more open, outgoing, and carefree—someone who
+    flies by the seat of their pants and is flexible in all areas. But that’s not really how I live. I’m steady,
+    disciplined, and I get things done. I’m pretty empathetic and I care about the people around me, but I’m also
+    practical. I don’t chase after new ideas just for the sake of it; I prefer what I know works. I’m not much for
+    taking big risks with money or anything else, and I like to keep things simple and minimal. I’m generally calm—anxiety
+    and mood swings aren’t a big part of my life—and I don’t feel the need to stand out or be unique. I’m fine with
+    being part of a group and doing my part, as long as things are fair and orderly.
+
+
+    I’m not drawn to abstract puzzles or theoretical debates; I’ve never been one to overthink things. I’m decisive,
+    and once I’ve made up my mind, I stick with it. I’m a planner, not a improviser, and I’m happiest when everything
+    is in its place. People can count on me, and that matters more to me than being adventurous or spontaneous.'
+  574: 'I’m a student, still working on my degree, and I’m lucky enough to have a good support system behind me.
+    I’m a pretty sociable guy—I enjoy being around people and I generally get along with them, though I’m not someone
+    who needs to be the center of attention. I’d say I’m more on the driven side: I like to think things through,
+    I enjoy a good mental challenge, and I’m not afraid to put in the work to get where I want to go. I’m a big
+    believer in personal responsibility and self-discipline—that’s just how I was raised.
+
+
+    I also value my independence, but I care a lot about the people around me. I want to be someone who’s both successful
+    and kind—someone who can take care of others and be there for them. I think it’s important to think about others
+    before myself, and I try to live by that. I’m definitely not perfect, and I know I fall short sometimes, but
+    I actively work toward those goals every day. I like to keep things simple—I don’t need a lot of stuff or drama
+    in my life. I’m a planner, and I like to have a clear idea of where I’m heading. I’m not someone who gets anxious
+    or down very often; I tend to keep a steady, even keel. I’m also pretty good with money and understanding how
+    things work financially. I like to make decisions that make sense, and I don’t like leaving things to chance
+    when I can think them through. At the end of the day, I just want to be a good, hardworking person who makes
+    a difference for the people I care about.'
+  1944: 'I''m a pretty quiet guy, living in the Midwest with my partner. I work full-time, and I have an associate''s
+    degree. I keep to myself a lot—I''m not someone who needs a big social circle, and I can be pretty critical
+    and blunt. Honestly, I don''t go out of my way to please people. I''m also a very emotional person, and I''m
+    the first to admit I''m anxious and a bit neurotic. It''s a constant struggle.
+
+
+    I know I can be lazy and don''t always put work first in my life. I''m a distant friend and partner, and I know
+    I don''t communicate very well. I have a hard time being mindful of my own emotions, and my self-concept feels
+    pretty fuzzy. I like having answers and certainty, but I don''t always feel like I have them, especially about
+    myself. I''m also not great at holding back my impulses, especially when it comes to spending money.
+
+
+    The person I aspire to be is more patient. I get irritable and anxiety-ridden, so that''s a real challenge.
+    I want to have more mindfulness for myself and awareness of my own emotions and feelings. I want to be successful
+    but also happy—financially well off while also being happy with my hobbies and those around me.
+
+
+    The person I feel I *ought* to be is a diligent homemaker. People around me are always asking when I''m going
+    to have children, and I just don''t want that. I should be in a better place mentally and have my stuff together
+    with a job I want to do for the rest of my life. I just want to get there.'
+  33: 'I live in the Midwest, and I’ve built a life here on my own—I work full-time, I’m independent, and I’ve never
+    been married. That independence is probably the thing I’m most sure about. I’m kind, but I’m not a pushover,
+    and I don’t go out of my way to please people just for the sake of it. I can be critical, and I hold myself
+    and others to high standards. I’m not especially outgoing or adventurous; I like routine and knowing what to
+    expect, and I’m not one for minimalism or chasing new experiences for their own sake. I do care about people,
+    though—I try to treat others the way I want to be treated, and I feel for those who are struggling, even if
+    I don’t always show it perfectly.
+
+
+    I’m a planner and a perfectionist in a lot of ways. I think things through carefully, and I’m good at spotting
+    when an answer that feels right is actually wrong. I’m not a big risk-taker—I’d rather have a sure thing than
+    gamble on a lottery. I’m impatient when it comes to waiting for rewards, though, and I get anxious more than
+    I’d like. Some days, that anxiety and self-doubt weigh on me, and I don’t always have a clear sense of who I
+    am deep down. But I keep going.
+
+
+    I’m a Democrat, a liberal, and I go to church a few times a year. I believe in standing up for people who don’t
+    have a voice, even if it’s hard. My goal is to be strong, to know my worth, and to lift others up along the
+    way. I fall short sometimes, but I keep trying.'
+  1524: 'I’ve always been someone who thinks deeply about things—I love exploring ideas, whether that’s through
+    reading, puzzles, or just having a good conversation about something new. I’m quite happy in my own company,
+    but I’m also someone people find easy to talk to; I care a lot about others and can feel what they’re feeling
+    almost instinctively. I don’t tend to get rattled by life’s ups and downs; I’m pretty steady, and I like to
+    keep my life simple and uncluttered, both in my home and in my mind.
+
+
+    I’m the kind of person who would rather help than be helped. I’ve always put others first—sometimes to my own
+    detriment, honestly. It’s probably why I haven’t ended up with much financially, but I wouldn’t change that
+    about myself. I feel a deep responsibility to the people around me, and even to the animals that come into my
+    life; I’ll always be there for them, happily and lovingly. I’m more spiritual than religious these days—religion
+    was a stepping stone for me, but now I trust in the Universe, or Source, whatever you want to call it.
+
+
+    I’ve lived a full life and I’m proud of the many things I can do. I’m creative in a lot of ways—art, music,
+    dance, writing, tech, even training animals. People see me as patient, kind, generous, and forgiving. I aspire
+    to be a person of peace and understanding, and I want to keep growing in wisdom and patience. I’d like to be
+    a source of guidance and unconditional love for others, and I still hope to find a way to be more stable so
+    I can help the people I care about even better.'
+  426: I’m a Midwesterner, married, working full-time, and I’d say I’m a pretty happy, grounded person. I’m warm
+    and get along well with others, but I’m also my own person—I don’t need to be the center of attention, and I’m
+    perfectly comfortable going my own way. I’m organized and self-disciplined, though I wouldn’t call myself a
+    perfectionist. I love learning new things and thinking through complex problems; I’m the kind of person who
+    enjoys a good puzzle or a challenging book. At the same time, I’m not highly anxious or prone to worry—I take
+    life as it comes. I’ve always been a bit of a nontraditional thinker. I like to stand out, and I don’t mind
+    making decisions that feel right to me even if they’re not what everyone else would pick. I’m pretty good at
+    reading a room and adapting how I come across, though I sometimes wonder if I really know who I am deep down.
+    I don’t need closure on everything; I’m fine with ambiguity. I’m a maximizer—I like to weigh all the options
+    and find the best one rather than just settling. I’m careful with money, maybe even a bit tight at times, and
+    I think a lot before I spend. I’m not big on risk. I care about the environment and try to be mindful in that
+    way, though I’m not extreme about it. As for who I want to be—I aspire to be compassionate, well-spoken, healthy,
+    and organized, and to be successful in what I enjoy. I ought to be respectful, nurturing, and loving. And honestly,
+    I think I already am a loving and compassionate person. I have many interests and I enjoy them, and I do keep
+    things organized.
+  1813: 'I’m a married man, living in the South, working full-time in a field that required postgraduate study.
+    I’m an atheist and a Democrat, very liberal in my views, and I earn a good income. I have a family of four,
+    and I consider myself a gregarious bon vivant. I’m a hedonist—I enjoy life’s pleasures and I’m proud and smug,
+    without regret.
+
+
+    I’m not particularly interested in pleasing others or being agreeable; I can be critical and I don’t go out
+    of my way to accommodate people. I’m emotionally steady and rarely anxious or down. I’m not a big fan of minimalism—I
+    like having things and experiences. I’m not especially empathetic, and I don’t get overly sentimental about
+    others’ feelings, though I know what’s expected of me.
+
+
+    I have a strong analytical mind. I’m very good at logical reasoning, math, and picking up knowledge. I enjoy
+    thinking through complex problems, and I’m confident in my abilities—sometimes more than my actual performance
+    would justify, but I trust my gut. I’m also good with money and understand financial concepts well. I’m not
+    afraid of risk, and I don’t get bogged down by indecision; I’m a satisficer, not a perfectionist. I have a clear
+    sense of who I am, and I don’t care much about fitting in or being unique.
+
+
+    What I aspire to be is a man of leisure. I want to have unique experiences and to be looked at as a knowledgeable
+    person. I want to live a long life. I know I ought to be helpful and supportive at work and at home, a dependable
+    friend, and willing to sacrifice for others. That’s the duty side of things. But when it comes down to it, I
+    am what I am, and I’m fine with that.'
+  821: 'I’m someone who values family and the people I love more than anything material. I’ll sacrifice my own comfort
+    to help others, and I try to be kind and loving in my daily life. That said, I do get stressed out or frustrated
+    more easily than I’d like, and I can be impatient at times. I’m not the most outgoing person—I’m fairly quiet
+    and keep to myself—but I’m warm and cooperative with people I trust. I don’t chase status or try to climb over
+    anyone; that sort of thing has never mattered much to me.
+
+
+    At work, I’m disciplined and efficient. I take my responsibilities seriously and I push myself to improve, even
+    if I sometimes feel I should be spending more time on self-improvement than relaxing. I’m a planner, and I like
+    to get things done right. Financially, I’m careful and knowledgeable—I understand how money works and I prefer
+    security over risky bets. I’m not impulsive when it comes to spending or decisions; I like to think things through.
+
+
+    I’m also pretty good at solving problems logically, especially ones that require careful reasoning rather than
+    quick guesses. I don’t have a huge need to stand out or be different, and I’m not very driven by ambition in
+    a competitive sense. I’m more focused on my family, my faith, and being a decent person. I hope to become someone
+    who is truly selfless, who doesn’t feel jealousy or envy, and who leaves the world a little better than I found
+    it. That’s the person I want to be.'

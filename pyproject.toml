@@ -1,0 +1,19 @@
+[project]
+name = "hotcold-llm"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "langchain>=1.4.9",
+    "langchain-anthropic>=1.7.10",
+    "langchain-openai>=1.7.4",
+    "matplotlib>=3.11.2",
+    "openpyxl>=3.1.5",
+    "pandas>=3.1.1",
+    "pyarrow>=26.0.1",
+    "pytest>=9.2.0",
+    "pyyaml>=6.0.3",
+    "tabulate>=0.10.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
