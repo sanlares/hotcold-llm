@@ -126,4 +126,6 @@ OpenAI y DeepInfra recibían `strict: False`.
 
 ## Después de la revisión
 
-Como cambió lo que ven los agentes (puntos 3, 4, 6 y 8), se repitió el piloto de control con el código final (ver abajo).
+Como cambió lo que ven los agentes (puntos 3, 4, 6 y 8), se repite el piloto de control con el código final (`runs/20261107-133726_batch_piloto-control-2`).
+
+**Estado:** quedó a medias porque DeepInfra se quedó sin saldo (error 402). Se completaron Haiku, gpt-5-nano, DeepSeek, gpt-oss y Qwen3 235B con la Persona demográfica. Las corridas con saldo agotado se detuvieron solas, sin marcar agentes como error, y se retoman con `--resume`. Fue, sin buscarlo, una prueba real del freno ante errores fatales.

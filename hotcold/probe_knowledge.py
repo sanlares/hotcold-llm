@@ -41,8 +41,10 @@ SCHEMA = {"type": "object", "additionalProperties": False,
 
 async def probe(models: list[str]) -> pd.DataFrame:
     async def one(m):
-        model = LangChainModel(m)
-        ans, meta = await model.respond(SYSTEM, [{"role": "user", "content": QUESTION}], SCHEMA)
+        try:
+            ans, meta = await LangChainModel(m).respond(SYSTEM, [{"role": "user", "content": QUESTION}], SCHEMA)
+        except Exception as e:  # one provider failing (e.g. no credit) must not lose the other answers
+            return {"model": m, "knows_paper": None, "error": f"{type(e).__name__}: {e}"[:300]}
         return {"model": m, **(ans or {"knows_paper": None}), "model_version": meta.get("model_version"),
                 "cost_usd": round(cost_usd(m, meta.get("usage", {})), 5), "raw": None if ans else meta.get("text")}
     return pd.DataFrame(await asyncio.gather(*(one(m) for m in models)))
@@ -55,12 +57,12 @@ def main():
     ap.add_argument("--out", type=Path, default=None)
     a = ap.parse_args()
     models = FINAL_MODELS if a.models == "final" else a.models.split(",")
-    df = probe_df = asyncio.run(probe(models))
+    df = asyncio.run(probe(models))
     df.insert(0, "asked", time.strftime("%Y-%m-%d"))
     out = a.out or Path(__file__).resolve().parents[1] / "runs" / f"knowledge_probe_{time.strftime('%Y%m%d-%H%M%S')}.csv"
     out.parent.mkdir(parents=True, exist_ok=True)
-    probe_df.to_csv(out, index=False)
-    print(df[["model", "knows_paper", "predicted_left_hot", "predicted_left_cold", "summary"]].to_string())
+    df.to_csv(out, index=False)
+    print(df.reindex(columns=["model", "knows_paper", "predicted_left_hot", "predicted_left_cold", "summary", "error"]).to_string())
     print(f"-> {out}")
 
 
