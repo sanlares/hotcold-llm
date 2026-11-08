@@ -120,7 +120,7 @@ OpenAI y DeepInfra recibían `strict: False`.
 
 - **Repetición.** Mantener la sesión como una conversación hace que los agentes repitan su conducta: 75% o más nunca cambian de decisión, contra 38% de los humanos. La brecha de las rondas 19–20 de los agentes no se lee como aprendizaje. *Agregado al plan.*
 - **Qué miden los intervalos.** Solo el azar con este prompt y esta versión del modelo; la unidad para generalizar es el modelo. *Agregado al plan.*
-- **Nemotron y género.** Los 8 participantes de género "Other" o que prefirieron no decirlo reciben un relato con she/he. *Se agregó una tabla de sensibilidad sin ellos.*
+- **Nemotron y género.** Los 8 participantes de género "Other" o que prefirieron no decirlo reciben un relato con she/he. *Se agregó una tabla de sensibilidad sin ellos. Decisión del autor (2026-11-08): se mantienen en el brazo, porque Nemotron solo tiene mujeres y hombres.*
 - **Gemma.** Gemma escribió los textos de Nemotron y es el modelo que más cambia con ellos. Se menciona como caso atípico sin atribuirle la causa.
 - **El debrief.** Es una justificación escrita después de decidir, no la causa de la decisión. Si se codifica con un LLM, se usa uno de otra familia y se valida a mano una parte. *Agregado al plan.*
 
@@ -141,7 +141,7 @@ Como cambió lo que ven los agentes (puntos 3, 4, 6 y 8), se repite el piloto de
 - Los 20 agentes de Hot (10 por Persona) fallaron los 6 intentos; los 20 de Cold aprobaron.
 - En 113 de los 120 intentos el único error fue q3: responde "False" a "en cada ronda sabés lo que eligió el otro antes de decidir", que en Hot es verdadero.
 - **Consecuencia para la corrida definitiva:** nano casi no va a tener agentes en Hot, así que para nano no se puede calcular la brecha Hot − Cold. Ya estaba previsto presentarlo aparte; ahora se sabe que su aporte se limita a Cold y a la exclusión misma.
-- **Decisión pendiente del autor:** mantenerlo como está o cambiarlo (ver el log de recomendaciones).
+- **Decisión del autor (2026-11-08):** se mantiene como está, igual que en el diseño registrado. La exclusión en Hot se reporta como resultado sobre comprensión.
 
 **Edad en texto libre.** nano escribió, entre otras cosas, "Your age", "?" y "_unused". Se guarda tal cual y se marca en `chk_age_*`, como estaba previsto. Los otros 7 modelos escribieron la edad de su Persona en el 100% de los casos.
 
@@ -176,5 +176,14 @@ Con 20 agentes por combinación todas las celdas quedan por debajo de 30 agentes
 Humanos de *Baseline*, rondas 1–20: 45% en Hot y 39% en Cold.
 
 Los tres que dicen conocerlo resumen "más reciprocidad en Hot que en Cold". Eso se deduce del título y de la descripción incluida en la pregunta, así que no prueba que lo hayan leído. Ninguno dio cifras ni detalles que no estuvieran en la pregunta.
+
+**Versión anterior del paper.** Antes de publicarse circuló una versión anterior del proyecto: "A surprising hot-cold reciprocation gap" (CEPR Discussion Paper 19248, julio de 2024). **No contiene el experimento Baseline que se replica acá:**
+- Según los datos crudos del paquete de replicación (`StartDate`), el Baseline se corrió entre el 18 de marzo y el 24 de abril de 2025. Beliefs se corrió en diciembre de 2020 y No Intentions en diciembre de 2023.
+- El paper publicado se recibió el 5 de julio de 2024 y se revisó el 19 de septiembre de 2025.
+- Según su resumen en RePEc, la versión de 2024 destaca más reciprocidad en Cold que en Hot. Ese es el patrón del experimento Beliefs, que el paper publicado describe como opuesto al del Baseline (sección 4.3).
+
+Para la contaminación, esto implica que el resultado del Baseline no estaba en esa versión. Un modelo que la haya leído habría aprendido el patrón contrario. El sondeo de después de la corrida definitiva pregunta también por ese título.
+
+**Redacción de la Persona (2026-11-08).** La frase de educación repetía datos: *"You are a student and you live in the UK. You are a bachelor's (undergraduate) student and do not have a university degree yet."* Ahora es una sola oración, con la opción del cuestionario original ("Your educational background"): *"You live in the UK and you are a bachelor's student."* El cambio es igual en los dos brazos (en Nemotron va la ciudad en vez de "the UK") y en los cinco niveles de educación. De paso se corrigieron dos niveles que no usaban las palabras de la opción: "High school or below" decía que había terminado la secundaria (ahora: *"your educational background is high school or below"*) y "PhD student or above" perdía el "or above" (ahora: *"a student at PhD level or above"*). Además se sacó *"do not have a university degree yet"*, que el experimento no registra. No cambia ningún dato ni las pantallas, así que no se repitió el piloto.
 
 **Corrección.** En las tablas del análisis, el nombre "modelo | Persona" usaba una barra vertical, que en markdown parte la columna. Ahora es "modelo · Persona".

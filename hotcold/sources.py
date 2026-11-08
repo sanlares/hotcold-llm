@@ -28,7 +28,7 @@ from pathlib import Path
 import pandas as pd
 import yaml
 
-from .personas import EDUCATION_LINE, Persona, gender_line, render_backstory, without_invented
+from .personas import Persona, gender_line, render_backstory, student_line, without_invented
 
 HERE = Path(__file__).resolve().parents[1]
 EXT = HERE / "data/external"
@@ -169,8 +169,8 @@ def nemotron_assignment(seed: int = 0) -> dict[str, dict]:
 
 def nemotron_text(p: Persona, r) -> str:
     name = _nemotron_name(r)
-    facts = " ".join([gender_line(p, name), f"You live in {r.municipality} ({r.region}) and you are a student.",
-                      EDUCATION_LINE[p.education], "Now and then you take part in paid online studies on Prolific."])
+    facts = " ".join([gender_line(p, name), student_line(p, f"{r.municipality} ({r.region})"),
+                      "Now and then you take part in paid online studies on Prolific."])
     return facts + "\n\nA description of you:\n\n" + "\n\n".join(r[f].strip() for f in NEMO_FIELDS)
 
 

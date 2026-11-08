@@ -168,6 +168,14 @@ def test_demographic_persona_has_only_real_data(personas):
     assert len({d.backstory() for d in demo}) < len(demo)  # same demographics -> same text: nothing invented
 
 
+def test_final_personas_say_student_once():
+    from hotcold.run import select_personas
+    for src in ("demographic", "nemotron"):
+        for p in select_personas(src, 0):
+            facts = p.backstory().split("\n\n")[0]  # the real-data sentences (Nemotron adds its narrative after them)
+            assert facts.count("student") == 1 and "undergraduate" not in facts, facts
+
+
 def test_nemotron_for_all_agents(personas):
     from hotcold import sources
     from hotcold.run import sample
@@ -374,3 +382,13 @@ def test_analysis_uses_completed_agents_and_paired_humans(personas, tmp_path):
     allp = with_paired_humans(humans(), panel)
     paired = allp[allp.source.str.endswith("paired humans")]
     assert set(paired.real_id) == {p.real_id for p in ps[:4]} and paired.reci.notna().any()
+
+
+def test_trace_follows_one_agent_without_saving(capsys, tmp_path, monkeypatch):
+    from hotcold import trace
+    monkeypatch.chdir(tmp_path)
+    asyncio.run(trace.trace("baseline_19", wrong_quiz=1, short=True, color=False))
+    out = capsys.readouterr().out
+    assert "Mensaje de sistema" in out and "quiz incorrecto" in out and "quiz correcto" in out
+    assert out.count("━━━ Pedido") == 9 and "completó el experimento" in out
+    assert "la persona real eligió" in out and not any(tmp_path.iterdir())

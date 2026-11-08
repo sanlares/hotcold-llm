@@ -30,7 +30,7 @@ Es un juego de confianza que se repite 20 rondas, cada vez con otro participante
 | Exclusiones | Las del original: quien falla el quiz de comprensión 6 veces queda afuera |
 | Análisis | [`docs/plan_de_analisis.md`](docs/plan_de_analisis.md), escrito antes de correr |
 
-Para ver cómo funciona por dentro, [`docs/flujo_completo.md`](docs/flujo_completo.md) sigue a un agente real de principio a fin: su Persona, cada pantalla, el formulario que llena, lo que se guarda y cómo entra al análisis.
+Para ver cómo funciona por dentro, [`docs/flujo_completo.md`](docs/flujo_completo.md) sigue a un agente real de principio a fin: su Persona, cada pantalla, el formulario que llena, lo que se guarda y cómo entra al análisis. Para verlo en vivo con cualquier agente: `uv run python -m hotcold.trace baseline_19 --step` (gratis con el modelo simulado; `--model …` para uno real, `--pdb` para frenar en el debugger antes de cada pedido).
 
 En [`docs/pilotos.md`](docs/pilotos.md) están los pilotos que llevaron a este diseño.
 
@@ -189,7 +189,7 @@ Cómo se garantiza que la respuesta sea una de las opciones depende del proveedo
 
 ### Personas (`hotcold/personas.py`, `hotcold/sources.py`)
 
-**Demográfica.** Ejemplo: *"You are a woman aged 21. You are a student and you live in the UK. You are a bachelor's (undergraduate) student and do not have a university degree yet. Now and then you take part in paid online studies on Prolific."*
+**Demográfica.** Ejemplo: *"You are a woman aged 21. You live in the UK and you are a bachelor's student. Now and then you take part in paid online studies on Prolific."*
 
 **Nemotron.** Esa misma información, más un nombre, una ciudad y cinco textos de la persona emparejada: personalidad, origen cultural, perfil profesional, hobbies y metas.
 - La persona de Nemotron es siempre un estudiante: ocupación censal "no aplica" y un texto que la describe estudiando.
@@ -213,7 +213,7 @@ Todos se llaman con LangChain (`init_chat_model`), así que cualquier proveedor 
 
 | Original | Acá |
 |---|---|
-| Figura de pagos (imagen) | Descripción en texto con los mismos números, que también están en las instrucciones |
+| Figura de pagos (imagen) | Descripción en texto con los mismos números, que también están en las instrucciones. La imagen es el árbol completo del juego, con la rama OUT incluida, y es la misma en las 48 pantallas que la usan (instrucciones, quiz y las 40 de decisión). Se puede ver en el [servidor de Qualtrics de los autores](https://tilburgss.co1.qualtrics.com/CP/Graphic.php?IM=IM_4IUrWU1bd69Euln) |
 | Consentimiento, Prolific ID, "¿Sos estudiante?" | Se omiten; la Persona ya es estudiante |
 | Pantallas de solo "Next" | Agrupadas con la siguiente pantalla que pide respuesta |
 | Botón "Anterior" activado en Qualtrics: se podía volver a pantallas anteriores | El agente tiene toda la sesión en su memoria (puede "releerla"), pero no puede cambiar una respuesta ya dada |
@@ -246,6 +246,7 @@ hotcold/
   audit_inputs.py    auditoría de todo lo que se manda a los agentes
   analysis.py        tablas, gráfico y validación con la Tabla 2 del paper
   probe_knowledge.py pregunta a cada modelo, fuera del personaje, si conoce el paper
+  trace.py           sigue a un solo agente en la terminal, pedido por pedido (gratis con el modelo simulado)
   compare.py, twin_trust.py, make_twin_narratives.py, personas_rich.yaml   solo pilotos
 tests/               tests sin llamadas a modelos
 docs/                flujo de un agente, plan de análisis, pilotos, revisión, auditoría del input, ejemplos

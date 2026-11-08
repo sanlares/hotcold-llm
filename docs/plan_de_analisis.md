@@ -100,7 +100,7 @@ La segunda predicción del paper (brecha mayor en Low que en High) se muestra co
 
 **Exclusiones por celda**, para cada modelo × Persona. Referencia humana: en el original, 3 de 534 participantes fallaron el quiz.
 
-Un modelo con muchas exclusiones (en el piloto, gpt-5-nano) se presenta **aparte**: la exclusión es un resultado en sí mismo y los agentes que quedan son una muestra seleccionada.
+Un modelo con muchas exclusiones (en el piloto, gpt-5-nano) se presenta **aparte**: la exclusión es un resultado en sí mismo y los agentes que quedan son una muestra seleccionada. En el segundo piloto de control, gpt-5-nano no aprobó el quiz en ningún agente de Hot (`revision_metodologica.md`): se espera que no tenga brecha Hot − Cold interpretable, y se reportan su Cold y su exclusión.
 
 **Chequeos:**
 - **Consistencia del cuestionario final con la Persona:** edad, género y educación. Una respuesta rara (por ejemplo, edad "−28") **se registra como conducta del modelo y no se corrige**.

@@ -69,14 +69,14 @@ Cada participante real tiene dos versiones de Persona, una por brazo del diseño
 
 **Brazo 1 · demográfica.** Solo lo que registró el experimento, sin nada inventado:
 
-> You are a woman aged 21. You are a student and you live in the UK. You are a bachelor's (undergraduate) student and do not have a university degree yet. Now and then you take part in paid online studies on Prolific.
+> You are a woman aged 21. You live in the UK and you are a bachelor's student. Now and then you take part in paid online studies on Prolific.
 
 **Brazo 2 · Nemotron.** La misma demografía, más el relato de una persona sintética de Nemotron-Personas-UK (NVIDIA). Se busca una estudiante del mismo género, edad y educación (si no hay de la misma edad, se amplía unos años); acá la edad coincide exacta. Cada relato se usa una sola vez.
 
 <details>
 <summary>Ver la Persona de Nemotron completa ("Emily")</summary>
 
-> You are Emily, a woman aged 21. You live in Guildford (South East) and you are a student. You are a bachelor's (undergraduate) student and do not have a university degree yet. Now and then you take part in paid online studies on Prolific.
+> You are Emily, a woman aged 21. You live in Guildford (South East) and you are a bachelor's student. Now and then you take part in paid online studies on Prolific.
 >
 > A description of you:
 >
@@ -101,9 +101,8 @@ El resto de este documento sigue al agente del brazo 1.
 Es lo primero que recibe el modelo, y queda fijo durante toda la sesión:
 
 ```text
-You are a woman aged 21. You are a student and you live in the UK. You are a bachelor's
-(undergraduate) student and do not have a university degree yet. Now and then you take part
-in paid online studies on Prolific.
+You are a woman aged 21. You live in the UK and you are a bachelor's student. Now and then
+you take part in paid online studies on Prolific.
 
 You are now taking part in an online study on Prolific, on your computer. You will see the
 study's screens in order, as text: pictures are described in square brackets, and the options

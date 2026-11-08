@@ -297,7 +297,24 @@ def _study_line(rng, age, edu, fld, city) -> str:
     return f"You are studying part-time for a professional qualification related to {fld} in {city}."
 
 
-# The real education answer, stated in the questionnaire's own terms so the agent cannot misread it.
+# Final design: the real answer to "Your educational background", in the questionnaire's own terms, folded into
+# the student fact (every participant answered yes to "Are you a student?"), so "student" is said only once.
+STUDENT = {
+    "High school or below": "a student; your educational background is high school or below",
+    "Bachelor student": "a bachelor's student",
+    "Master student": "a master's student",
+    "PhD student or above": "a student at PhD level or above",
+    "Other": "a student; your educational background does not fit the usual categories "
+             "(high school or below, bachelor's, master's, PhD or above)",
+}
+
+
+def student_line(p: Persona, place: str = "the UK") -> str:
+    """'You live in the UK and you are a bachelor's student.'"""
+    return f"You live in {place} and you are {STUDENT[p.education]}."
+
+
+# Pilots only (render_backstory): the wording those runs were sent, kept so they can be reproduced.
 EDUCATION_LINE = {
     "High school or below": "Your highest completed level of education is high school; you do not have a university degree.",
     "Bachelor student": "You are a bachelor's (undergraduate) student and do not have a university degree yet.",
@@ -319,8 +336,7 @@ def gender_line(p: Persona, name: str = "") -> str:
 
 def render_demographic(p: Persona) -> str:
     """Final-design Persona: only the real data recorded in the experiment, nothing invented."""
-    return " ".join([gender_line(p), "You are a student and you live in the UK.", EDUCATION_LINE[p.education],
-                     "Now and then you take part in paid online studies on Prolific."])
+    return " ".join([gender_line(p), student_line(p), "Now and then you take part in paid online studies on Prolific."])
 
 
 INVENTED = ("name", "origin", "hometown", "nationality", "uni_city", "field_of_study", "study_line", "living",

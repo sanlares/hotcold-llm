@@ -2,6 +2,8 @@
 
 Modelo: claude-haiku-5-5. Tomada tal cual de `results.jsonl` del segundo piloto de control (noviembre de 2026). Persona demográfica: solo datos reales.
 
+> **Cambio posterior a este piloto:** la frase de educación de la Persona se acortó. Acá dice *"You are a student and you live in […]. You are a bachelor's (undergraduate) student and do not have a university degree yet."*; en la corrida definitiva dice *"You live in […] and you are a bachelor's student."* El resto del mensaje no cambió.
+
 Cada sección es un mensaje. **SYSTEM** es el mensaje inicial (la Persona y las reglas del entorno); **USER** es lo que ve el agente (pantallas del `.qsf`); **AGENT** es su respuesta en el formulario. Todo queda en la conversación, que funciona como memoria.
 
 Lo que no se ve acá es el formulario que acompaña a cada pantalla: las casillas, sus opciones y el texto de cada pregunta. Ver `docs/flujo_completo.md`.
