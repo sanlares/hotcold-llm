@@ -128,7 +128,7 @@ uv run python -m hotcold.batch --resume runs/<lote> --retry-errors
 
 **Seguimiento.** Mientras corre, `runs/<lote>/status.json` muestra el avance de cada combinación.
 
-Sondeo de conocimiento: una pregunta por modelo, fuera del personaje, sobre si conoce el paper. Son 8 pedidos y cuesta centavos.
+Sondeo de conocimiento: dos preguntas por modelo, fuera del personaje y cada una en una conversación nueva. Una pregunta si conoce el paper publicado; la otra, si conoce la versión de 2024 ("A surprising hot-cold reciprocation gap", CEPR DP 19248), que no tiene el experimento Baseline. Son 16 pedidos y cuesta centavos.
 
 ```bash
 uv run python -m hotcold.probe_knowledge --out runs/<lote>/knowledge_probe.csv

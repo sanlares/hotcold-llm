@@ -91,7 +91,8 @@ def is_fatal(e: Exception) -> bool:
         return True
     status = getattr(e, "status_code", None)
     msg = str(e).lower()
-    return status == 402 or "credit balance" in msg or "insufficient_quota" in msg
+    # "spend limit": OpenAI answers 429 when the organization reaches the monthly limit set in its settings
+    return status == 402 or "credit balance" in msg or "insufficient_quota" in msg or "spend limit" in msg
 
 
 def cost_usd(model: str, usage: dict) -> float:

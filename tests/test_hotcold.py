@@ -392,3 +392,17 @@ def test_trace_follows_one_agent_without_saving(capsys, tmp_path, monkeypatch):
     assert "Mensaje de sistema" in out and "quiz incorrecto" in out and "quiz correcto" in out
     assert out.count("━━━ Pedido") == 9 and "completó el experimento" in out
     assert "la persona real eligió" in out and not any(tmp_path.iterdir())
+
+
+def test_knowledge_probe_asks_each_title_apart():
+    from hotcold.probe_knowledge import QUESTIONS
+    pub, wp = QUESTIONS["published"][0], QUESTIONS["wp2024"][0]
+    assert "Hot-cold reciprocation gaps" in pub and "surprising" not in pub and "19248" not in pub
+    assert "A surprising hot-cold reciprocation gap" in wp and "Experimental Economics" not in wp
+    assert "Baseline" not in wp and "LEFT" not in wp  # no description of the game: only the title is asked
+
+
+def test_spend_limit_stops_the_run_instead_of_flagging_agents():
+    from hotcold.llm import is_fatal
+    msg = "Error code: 429 - Your organization has reached its configured enforced spend limit."
+    assert is_fatal(Exception(msg)) and not is_fatal(Exception("Error code: 429 - Rate limit reached"))
