@@ -1,0 +1,18 @@
+source,agents,reciprocate %,same humans %,"distance to them, 4 cells (pp)",Hot − Cold (pp),High − Low trust rate (pp),rounds 19-20 − round 1 (pp),"changes choice, % of consecutive decisions",fewest agents in a cell
+humans (all),396,"41 [38, 44]",41,—,"+6 [-1, +13]","+1 [-6, +8]",-14,28,95
+DeepSeek-V4-Flash-0731 · demographic,396,"32 [28, 36]",41,9,"+13 [+4, +20]","+4 [-5, +12]",-4,10,95
+DeepSeek-V4-Flash-0731 · nemotron,396,"46 [41, 51]",41,4,"+1 [-9, +9]","-0 [-9, +9]",-2,9,95
+Llama-4-Scout-17B-16E-Instruct · demographic,396,"18 [15, 21]",41,18,"+36 [+32, +39]","+7 [+4, +10]",+17,34,95
+Llama-4-Scout-17B-16E-Instruct · nemotron,396,"35 [32, 38]",41,6,"+12 [+7, +18]","+10 [+5, +16]",+22,52,95
+Qwen3-235B-A22B-Instruct-2507 · demographic,396,"0 [0, 0]",41,42,"+0 [+0, +0]","+0 [+0, +0]",+0,0,95
+Qwen3-235B-A22B-Instruct-2507 · nemotron,396,"7 [4, 10]",41,35,"-0 [-5, +5]","-2 [-7, +3]",-1,0,95
+Qwen3.8-Flash · demographic,396,"4 [2, 6]",41,38,"+0 [-4, +4]","-1 [-5, +3]",-3,0,95
+Qwen3.8-Flash · nemotron,396,"11 [8, 14]",41,32,"-9 [-14, -3]","-4 [-10, +2]",+1,0,95
+claude-haiku-5-5 · demographic,396,"4 [2, 6]",41,39,"-0 [-4, +3]","+5 [+2, +8]",+2,1,95
+claude-haiku-5-5 · nemotron,392,"24 [20, 28]",41,18,"+5 [-2, +13]","+7 [-0, +15]",+10,5,95
+gemma-4-31B-it-turbo · demographic,396,"12 [9, 16]",41,32,"-11 [-18, -6]","-2 [-9, +3]",+2,0,95
+gemma-4-31B-it-turbo · nemotron,396,"59 [54, 64]",41,17,"+2 [-7, +12]","+1 [-9, +10]",-1,0,95
+gpt-5-nano · demographic,196,"100 [99, 100]",39,—,—,—,+0,1,1
+gpt-5-nano · nemotron,197,"99 [98, 99]",40,—,—,—,+0,3,2
+gpt-oss-120b · demographic,396,"71 [68, 74]",41,24,"-27 [-33, -21]","-12 [-18, -6]",+17,36,95
+gpt-oss-120b · nemotron,396,"59 [55, 63]",41,16,"-22 [-30, -15]","-5 [-12, +3]",+18,24,95

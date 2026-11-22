@@ -1,0 +1,199 @@
+source,window,spec,n,Hot,Hot×High
+humans (all),round 1,Hot + High,395,0.005 (0.050),
+humans (all),round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+humans (all),rounds 19-20,Hot + High,579,0.103 (0.049),
+humans (all),rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+humans (all),rounds 1-20,Hot + High,5815,0.056 (0.036),
+humans (all),rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+DeepSeek-V4-Flash-0731 · demographic,round 1,Hot + High,395,0.101 (0.049),
+DeepSeek-V4-Flash-0731 · demographic,round 1,Hot×High,395,-0.022 (0.069),0.245 (0.096)
+DeepSeek-V4-Flash-0731 · demographic,rounds 19-20,Hot + High,579,0.178 (0.053),
+DeepSeek-V4-Flash-0731 · demographic,rounds 19-20,Hot×High,579,0.110 (0.083),0.102 (0.105)
+DeepSeek-V4-Flash-0731 · demographic,rounds 1-20,Hot + High,5815,0.154 (0.045),
+DeepSeek-V4-Flash-0731 · demographic,rounds 1-20,Hot×High,5815,0.029 (0.062),0.192 (0.084)
+DeepSeek-V4-Flash-0731 · demographic · paired humans,round 1,Hot + High,395,0.005 (0.050),
+DeepSeek-V4-Flash-0731 · demographic · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+DeepSeek-V4-Flash-0731 · demographic · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+DeepSeek-V4-Flash-0731 · demographic · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+DeepSeek-V4-Flash-0731 · demographic · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+DeepSeek-V4-Flash-0731 · demographic · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+DeepSeek-V4-Flash-0731 · nemotron,round 1,Hot + High,395,-0.036 (0.051),
+DeepSeek-V4-Flash-0731 · nemotron,round 1,Hot×High,395,-0.069 (0.072),0.065 (0.100)
+DeepSeek-V4-Flash-0731 · nemotron,rounds 19-20,Hot + High,579,0.009 (0.056),
+DeepSeek-V4-Flash-0731 · nemotron,rounds 19-20,Hot×High,579,-0.005 (0.085),0.022 (0.111)
+DeepSeek-V4-Flash-0731 · nemotron,rounds 1-20,Hot + High,5815,0.012 (0.050),
+DeepSeek-V4-Flash-0731 · nemotron,rounds 1-20,Hot×High,5815,-0.039 (0.066),0.080 (0.093)
+DeepSeek-V4-Flash-0731 · nemotron · paired humans,round 1,Hot + High,395,0.005 (0.050),
+DeepSeek-V4-Flash-0731 · nemotron · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+DeepSeek-V4-Flash-0731 · nemotron · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+DeepSeek-V4-Flash-0731 · nemotron · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+DeepSeek-V4-Flash-0731 · nemotron · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+DeepSeek-V4-Flash-0731 · nemotron · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+Llama-4-Scout-17B-16E-Instruct · demographic,round 1,Hot + High,395,0.001 (0.019),
+Llama-4-Scout-17B-16E-Instruct · demographic,round 1,Hot×High,395,0.014 (0.027),-0.024 (0.038)
+Llama-4-Scout-17B-16E-Instruct · demographic,rounds 19-20,Hot + High,579,0.429 (0.036),
+Llama-4-Scout-17B-16E-Instruct · demographic,rounds 19-20,Hot×High,579,0.605 (0.068),-0.265 (0.078)
+Llama-4-Scout-17B-16E-Instruct · demographic,rounds 1-20,Hot + High,5815,0.353 (0.018),
+Llama-4-Scout-17B-16E-Instruct · demographic,rounds 1-20,Hot×High,5815,0.379 (0.020),-0.041 (0.032)
+Llama-4-Scout-17B-16E-Instruct · demographic · paired humans,round 1,Hot + High,395,0.005 (0.050),
+Llama-4-Scout-17B-16E-Instruct · demographic · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+Llama-4-Scout-17B-16E-Instruct · demographic · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+Llama-4-Scout-17B-16E-Instruct · demographic · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+Llama-4-Scout-17B-16E-Instruct · demographic · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+Llama-4-Scout-17B-16E-Instruct · demographic · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+Llama-4-Scout-17B-16E-Instruct · nemotron,round 1,Hot + High,395,-0.078 (0.035),
+Llama-4-Scout-17B-16E-Instruct · nemotron,round 1,Hot×High,395,-0.038 (0.050),-0.080 (0.070)
+Llama-4-Scout-17B-16E-Instruct · nemotron,rounds 19-20,Hot + High,579,0.104 (0.042),
+Llama-4-Scout-17B-16E-Instruct · nemotron,rounds 19-20,Hot×High,579,0.236 (0.076),-0.199 (0.090)
+Llama-4-Scout-17B-16E-Instruct · nemotron,rounds 1-20,Hot + High,5815,0.093 (0.029),
+Llama-4-Scout-17B-16E-Instruct · nemotron,rounds 1-20,Hot×High,5815,0.160 (0.036),-0.104 (0.052)
+Llama-4-Scout-17B-16E-Instruct · nemotron · paired humans,round 1,Hot + High,395,0.005 (0.050),
+Llama-4-Scout-17B-16E-Instruct · nemotron · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+Llama-4-Scout-17B-16E-Instruct · nemotron · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+Llama-4-Scout-17B-16E-Instruct · nemotron · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+Llama-4-Scout-17B-16E-Instruct · nemotron · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+Llama-4-Scout-17B-16E-Instruct · nemotron · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+Qwen3-235B-A22B-Instruct-2507 · demographic,round 1,Hot + High,396,—,—
+Qwen3-235B-A22B-Instruct-2507 · demographic,round 1,Hot×High,396,—,—
+Qwen3-235B-A22B-Instruct-2507 · demographic,rounds 19-20,Hot + High,579,—,—
+Qwen3-235B-A22B-Instruct-2507 · demographic,rounds 19-20,Hot×High,579,—,—
+Qwen3-235B-A22B-Instruct-2507 · demographic,rounds 1-20,Hot + High,5821,—,—
+Qwen3-235B-A22B-Instruct-2507 · demographic,rounds 1-20,Hot×High,5821,—,—
+Qwen3-235B-A22B-Instruct-2507 · demographic · paired humans,round 1,Hot + High,395,0.005 (0.050),
+Qwen3-235B-A22B-Instruct-2507 · demographic · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+Qwen3-235B-A22B-Instruct-2507 · demographic · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+Qwen3-235B-A22B-Instruct-2507 · demographic · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+Qwen3-235B-A22B-Instruct-2507 · demographic · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+Qwen3-235B-A22B-Instruct-2507 · demographic · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+Qwen3-235B-A22B-Instruct-2507 · nemotron,round 1,Hot + High,395,-0.002 (0.026),
+Qwen3-235B-A22B-Instruct-2507 · nemotron,round 1,Hot×High,395,-0.005 (0.037),0.005 (0.052)
+Qwen3-235B-A22B-Instruct-2507 · nemotron,rounds 19-20,Hot + High,579,-0.025 (0.028),
+Qwen3-235B-A22B-Instruct-2507 · nemotron,rounds 19-20,Hot×High,579,-0.055 (0.039),0.045 (0.052)
+Qwen3-235B-A22B-Instruct-2507 · nemotron,rounds 1-20,Hot + High,5815,-0.005 (0.027),
+Qwen3-235B-A22B-Instruct-2507 · nemotron,rounds 1-20,Hot×High,5815,-0.012 (0.038),0.012 (0.051)
+Qwen3-235B-A22B-Instruct-2507 · nemotron · paired humans,round 1,Hot + High,395,0.005 (0.050),
+Qwen3-235B-A22B-Instruct-2507 · nemotron · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+Qwen3-235B-A22B-Instruct-2507 · nemotron · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+Qwen3-235B-A22B-Instruct-2507 · nemotron · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+Qwen3-235B-A22B-Instruct-2507 · nemotron · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+Qwen3-235B-A22B-Instruct-2507 · nemotron · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+Qwen3.8-Flash · demographic,round 1,Hot + High,395,0.036 (0.025),
+Qwen3.8-Flash · demographic,round 1,Hot×High,395,0.009 (0.035),0.053 (0.049)
+Qwen3.8-Flash · demographic,rounds 19-20,Hot + High,579,-0.006 (0.021),
+Qwen3.8-Flash · demographic,rounds 19-20,Hot×High,579,-0.033 (0.029),0.040 (0.040)
+Qwen3.8-Flash · demographic,rounds 1-20,Hot + High,5815,0.007 (0.021),
+Qwen3.8-Flash · demographic,rounds 1-20,Hot×High,5815,-0.009 (0.029),0.024 (0.040)
+Qwen3.8-Flash · demographic · paired humans,round 1,Hot + High,395,0.005 (0.050),
+Qwen3.8-Flash · demographic · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+Qwen3.8-Flash · demographic · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+Qwen3.8-Flash · demographic · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+Qwen3.8-Flash · demographic · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+Qwen3.8-Flash · demographic · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+Qwen3.8-Flash · nemotron,round 1,Hot + High,395,-0.090 (0.030),
+Qwen3.8-Flash · nemotron,round 1,Hot×High,395,-0.097 (0.042),0.014 (0.059)
+Qwen3.8-Flash · nemotron,rounds 19-20,Hot + High,579,-0.098 (0.032),
+Qwen3.8-Flash · nemotron,rounds 19-20,Hot×High,579,-0.122 (0.051),0.036 (0.064)
+Qwen3.8-Flash · nemotron,rounds 1-20,Hot + High,5815,-0.096 (0.030),
+Qwen3.8-Flash · nemotron,rounds 1-20,Hot×High,5815,-0.104 (0.045),0.012 (0.058)
+Qwen3.8-Flash · nemotron · paired humans,round 1,Hot + High,395,0.005 (0.050),
+Qwen3.8-Flash · nemotron · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+Qwen3.8-Flash · nemotron · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+Qwen3.8-Flash · nemotron · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+Qwen3.8-Flash · nemotron · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+Qwen3.8-Flash · nemotron · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+claude-haiku-5-5 · demographic,round 1,Hot + High,395,0.036 (0.013),
+claude-haiku-5-5 · demographic,round 1,Hot×High,395,0.006 (0.018),0.060 (0.026)
+claude-haiku-5-5 · demographic,rounds 19-20,Hot + High,579,0.002 (0.027),
+claude-haiku-5-5 · demographic,rounds 19-20,Hot×High,579,-0.007 (0.021),0.014 (0.040)
+claude-haiku-5-5 · demographic,rounds 1-20,Hot + High,5815,-0.008 (0.021),
+claude-haiku-5-5 · demographic,rounds 1-20,Hot×High,5815,-0.012 (0.015),0.007 (0.032)
+claude-haiku-5-5 · demographic · paired humans,round 1,Hot + High,395,0.005 (0.050),
+claude-haiku-5-5 · demographic · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+claude-haiku-5-5 · demographic · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+claude-haiku-5-5 · demographic · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+claude-haiku-5-5 · demographic · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+claude-haiku-5-5 · demographic · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+claude-haiku-5-5 · nemotron,round 1,Hot + High,391,0.199 (0.035),
+claude-haiku-5-5 · nemotron,round 1,Hot×High,391,0.171 (0.049),0.056 (0.069)
+claude-haiku-5-5 · nemotron,rounds 19-20,Hot + High,576,0.043 (0.049),
+claude-haiku-5-5 · nemotron,rounds 19-20,Hot×High,576,0.006 (0.071),0.056 (0.096)
+claude-haiku-5-5 · nemotron,rounds 1-20,Hot + High,5783,0.060 (0.043),
+claude-haiku-5-5 · nemotron,rounds 1-20,Hot×High,5783,-0.009 (0.052),0.105 (0.078)
+claude-haiku-5-5 · nemotron · paired humans,round 1,Hot + High,391,0.015 (0.051),
+claude-haiku-5-5 · nemotron · paired humans,round 1,Hot×High,391,0.026 (0.072),-0.020 (0.100)
+claude-haiku-5-5 · nemotron · paired humans,rounds 19-20,Hot + High,576,0.110 (0.050),
+claude-haiku-5-5 · nemotron · paired humans,rounds 19-20,Hot×High,576,0.186 (0.082),-0.115 (0.103)
+claude-haiku-5-5 · nemotron · paired humans,rounds 1-20,Hot + High,5783,0.063 (0.037),
+claude-haiku-5-5 · nemotron · paired humans,rounds 1-20,Hot×High,5783,0.079 (0.049),-0.025 (0.070)
+gemma-4-31B-it-turbo · demographic,round 1,Hot + High,395,-0.126 (0.029),
+gemma-4-31B-it-turbo · demographic,round 1,Hot×High,395,-0.152 (0.041),0.051 (0.058)
+gemma-4-31B-it-turbo · demographic,rounds 19-20,Hot + High,579,-0.117 (0.034),
+gemma-4-31B-it-turbo · demographic,rounds 19-20,Hot×High,579,-0.163 (0.053),0.070 (0.066)
+gemma-4-31B-it-turbo · demographic,rounds 1-20,Hot + High,5815,-0.120 (0.031),
+gemma-4-31B-it-turbo · demographic,rounds 1-20,Hot×High,5815,-0.154 (0.045),0.053 (0.058)
+gemma-4-31B-it-turbo · demographic · paired humans,round 1,Hot + High,395,0.005 (0.050),
+gemma-4-31B-it-turbo · demographic · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+gemma-4-31B-it-turbo · demographic · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+gemma-4-31B-it-turbo · demographic · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+gemma-4-31B-it-turbo · demographic · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+gemma-4-31B-it-turbo · demographic · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+gemma-4-31B-it-turbo · nemotron,round 1,Hot + High,395,0.012 (0.050),
+gemma-4-31B-it-turbo · nemotron,round 1,Hot×High,395,0.012 (0.071),0.001 (0.099)
+gemma-4-31B-it-turbo · nemotron,rounds 19-20,Hot + High,579,-0.016 (0.056),
+gemma-4-31B-it-turbo · nemotron,rounds 19-20,Hot×High,579,-0.014 (0.087),-0.002 (0.114)
+gemma-4-31B-it-turbo · nemotron,rounds 1-20,Hot + High,5815,0.005 (0.051),
+gemma-4-31B-it-turbo · nemotron,rounds 1-20,Hot×High,5815,0.000 (0.071),0.006 (0.098)
+gemma-4-31B-it-turbo · nemotron · paired humans,round 1,Hot + High,395,0.005 (0.050),
+gemma-4-31B-it-turbo · nemotron · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+gemma-4-31B-it-turbo · nemotron · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+gemma-4-31B-it-turbo · nemotron · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+gemma-4-31B-it-turbo · nemotron · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+gemma-4-31B-it-turbo · nemotron · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+gpt-5-nano · demographic,round 1,Hot + High,196,—,—
+gpt-5-nano · demographic,round 1,Hot×High,196,—,—
+gpt-5-nano · demographic,rounds 19-20,Hot + High,388,—,—
+gpt-5-nano · demographic,rounds 19-20,Hot×High,388,—,—
+gpt-5-nano · demographic,rounds 1-20,Hot + High,3865,0.004 (0.002),
+gpt-5-nano · demographic,rounds 1-20,Hot×High,3865,0.004 (0.002),-0.000 (0.002)
+gpt-5-nano · demographic · paired humans,round 1,Hot + High,195,0.160 (0.292),
+gpt-5-nano · demographic · paired humans,round 1,Hot×High,195,0.442 (0.358),-0.838 (0.620)
+gpt-5-nano · demographic · paired humans,rounds 19-20,Hot + High,388,0.207 (0.309),
+gpt-5-nano · demographic · paired humans,rounds 19-20,Hot×High,388,0.713 (0.049),-1.016 (0.086)
+gpt-5-nano · demographic · paired humans,rounds 1-20,Hot + High,3865,0.056 (0.287),
+gpt-5-nano · demographic · paired humans,rounds 1-20,Hot×High,3865,0.590 (0.035),-0.956 (0.067)
+gpt-5-nano · nemotron,round 1,Hot + High,197,—,—
+gpt-5-nano · nemotron,round 1,Hot×High,197,—,—
+gpt-5-nano · nemotron,rounds 19-20,Hot + High,384,—,—
+gpt-5-nano · nemotron,rounds 19-20,Hot×High,384,—,—
+gpt-5-nano · nemotron,rounds 1-20,Hot + High,3855,0.010 (0.005),
+gpt-5-nano · nemotron,rounds 1-20,Hot×High,3855,0.007 (0.005),0.007 (0.008)
+gpt-5-nano · nemotron · paired humans,round 1,Hot + High,197,0.371 (0.197),
+gpt-5-nano · nemotron · paired humans,round 1,Hot×High,197,0.289 (0.233),0.287 (0.426)
+gpt-5-nano · nemotron · paired humans,rounds 19-20,Hot + High,384,0.612 (0.063),
+gpt-5-nano · nemotron · paired humans,rounds 19-20,Hot×High,384,0.570 (0.087),0.085 (0.101)
+gpt-5-nano · nemotron · paired humans,rounds 1-20,Hot + High,3855,0.325 (0.121),
+gpt-5-nano · nemotron · paired humans,rounds 1-20,Hot×High,3855,0.111 (0.135),0.423 (0.170)
+gpt-oss-120b · demographic,round 1,Hot + High,395,-0.599 (0.036),
+gpt-oss-120b · demographic,round 1,Hot×High,395,-0.506 (0.050),-0.184 (0.070)
+gpt-oss-120b · demographic,rounds 19-20,Hot + High,579,-0.297 (0.043),
+gpt-oss-120b · demographic,rounds 19-20,Hot×High,579,-0.471 (0.070),0.263 (0.087)
+gpt-oss-120b · demographic,rounds 1-20,Hot + High,5815,-0.219 (0.031),
+gpt-oss-120b · demographic,rounds 1-20,Hot×High,5815,-0.400 (0.043),0.279 (0.058)
+gpt-oss-120b · demographic · paired humans,round 1,Hot + High,395,0.005 (0.050),
+gpt-oss-120b · demographic · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+gpt-oss-120b · demographic · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+gpt-oss-120b · demographic · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+gpt-oss-120b · demographic · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+gpt-oss-120b · demographic · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)
+gpt-oss-120b · nemotron,round 1,Hot + High,395,-0.215 (0.050),
+gpt-oss-120b · nemotron,round 1,Hot×High,395,-0.271 (0.070),0.112 (0.098)
+gpt-oss-120b · nemotron,rounds 19-20,Hot + High,579,-0.284 (0.052),
+gpt-oss-120b · nemotron,rounds 19-20,Hot×High,579,-0.468 (0.078),0.277 (0.102)
+gpt-oss-120b · nemotron,rounds 1-20,Hot + High,5815,-0.181 (0.043),
+gpt-oss-120b · nemotron,rounds 1-20,Hot×High,5815,-0.389 (0.055),0.322 (0.079)
+gpt-oss-120b · nemotron · paired humans,round 1,Hot + High,395,0.005 (0.050),
+gpt-oss-120b · nemotron · paired humans,round 1,Hot×High,395,0.010 (0.071),-0.011 (0.100)
+gpt-oss-120b · nemotron · paired humans,rounds 19-20,Hot + High,579,0.103 (0.049),
+gpt-oss-120b · nemotron · paired humans,rounds 19-20,Hot×High,579,0.177 (0.081),-0.112 (0.102)
+gpt-oss-120b · nemotron · paired humans,rounds 1-20,Hot + High,5815,0.056 (0.036),
+gpt-oss-120b · nemotron · paired humans,rounds 1-20,Hot×High,5815,0.065 (0.048),-0.014 (0.069)

@@ -1,0 +1,17 @@
+source,agents,completed,quiz-excluded,technical errors,format retries,quiz attempts (mean),age plausible %,age = Persona %,gender = Persona %,education = Persona %,says it knows a similar study %,debrief failed,R² demographics (humans 2.9%),model versions,cost USD
+DeepSeek-V4-Flash-0731 · demographic,396,396,0,0,3,1.0,100,100,100,100,0,0,0.4%,deepseek-ai/DeepSeek-V4-Flash-0731,0.558
+DeepSeek-V4-Flash-0731 · nemotron,396,396,0,0,1,1.01,100,100,100,100,0,0,2.7%,deepseek-ai/DeepSeek-V4-Flash-0731,0.624
+Llama-4-Scout-17B-16E-Instruct · demographic,396,396,0,0,0,1.0,100,100,100,100,0,0,3.7%,meta-llama/Llama-4-Scout-17B-16E-Instruct,2.472
+Llama-4-Scout-17B-16E-Instruct · nemotron,396,396,0,0,0,1.01,100,100,100,96,0,0,3.4%,meta-llama/Llama-4-Scout-17B-16E-Instruct,2.681
+Qwen3-235B-A22B-Instruct-2507 · demographic,396,396,0,0,0,1.0,100,100,100,100,8,0,0.0%,Qwen/Qwen3-235B-A22B-Instruct-2507,2.364
+Qwen3-235B-A22B-Instruct-2507 · nemotron,396,396,0,0,0,1.0,100,100,100,100,12,0,2.6%,Qwen/Qwen3-235B-A22B-Instruct-2507,2.557
+Qwen3.8-Flash · demographic,396,396,0,0,0,1.0,100,100,100,100,0,0,2.4%,Qwen/Qwen3.8-Flash,1.418
+Qwen3.8-Flash · nemotron,396,396,0,0,3,1.0,100,100,99,99,0,0,3.2%,Qwen/Qwen3.8-Flash,1.576
+claude-haiku-5-5 · demographic,396,396,0,0,0,1.03,100,100,100,100,0,0,3.8%,claude-haiku-5-5,1.841
+claude-haiku-5-5 · nemotron,396,392,4,0,0,1.21,100,100,100,100,0,0,2.8%,claude-haiku-5-5,2.051
+gemma-4-31B-it-turbo · demographic,396,396,0,0,0,1.0,100,100,100,100,0,0,8.2%,google/gemma-4-31B-it-turbo,1.737
+gemma-4-31B-it-turbo · nemotron,396,396,0,0,0,1.0,100,100,100,100,0,0,2.4%,google/gemma-4-31B-it-turbo,1.862
+gpt-5-nano · demographic,396,196,200,0,0,3.54,89,52,94,99,0,0,1.5%,gpt-5-nano-2025-08-07,0.616
+gpt-5-nano · nemotron,396,197,199,0,0,3.55,96,56,97,98,2,0,1.8%,gpt-5-nano-2025-08-07,0.699
+gpt-oss-120b · demographic,396,396,0,0,0,1.0,100,99,100,100,0,0,5.5%,openai/gpt-oss-120b,0.955
+gpt-oss-120b · nemotron,396,396,0,0,1,1.0,100,100,100,99,0,0,2.1%,openai/gpt-oss-120b,1.037

@@ -2,6 +2,18 @@
 
 Este repositorio replica el experimento ***Baseline*** de Ghidoni, Suetens y Yang (2026), *Hot–cold reciprocation gaps* (*Experimental Economics*), con agentes de IA (modelos de lenguaje, LLMs) en el lugar de los participantes humanos. Es parte de una tesis de licenciatura en economía: un estudio **exploratorio y descriptivo** que compara a los agentes con las mismas personas reales y con la predicción teórica.
 
+## Estado y resultados
+
+La corrida definitiva se hizo el 8 de noviembre de 2026: 8 modelos × 2 Personas × 396 agentes = 6.336 sesiones. Sus tablas y gráficos agregados están en [`resultados/definitiva_2026-11-08/`](resultados/definitiva_2026-11-08/): [`results.md`](resultados/definitiva_2026-11-08/results.md) tiene el análisis planificado y [`exploratory.md`](resultados/definitiva_2026-11-08/exploratory.md) los análisis agregados después.
+
+En pocas palabras:
+- Las personas devuelven la confianza el 41% de las veces. El promedio de los modelos queda por debajo: entre 18% y 23% según el tratamiento con la Persona demográfica, y entre 31% y 35% con la de Nemotron.
+- Los modelos son muy distintos entre sí: desde uno que casi nunca devuelve hasta otros que devuelven más que las personas.
+- Un solo modelo (Llama 4 Scout) reproduce la dirección de la brecha Hot − Cold, y lo hace con una regla mecánica, no con la experiencia.
+- La Persona mueve el nivel de reciprocidad. La respuesta al tratamiento depende casi por completo del modelo.
+
+Las conversaciones completas de cada agente (`runs/`, unos 500 MB) no están en este repositorio.
+
 ## El experimento original, en breve
 
 Es un juego de confianza que se repite 20 rondas, cada vez con otro participante.
@@ -28,7 +40,7 @@ Es un juego de confianza que se repite 20 rondas, cada vez con otro participante
 | Personas (2) | **Demográfica:** solo los datos reales del experimento (edad, género, educación, estudiante en el Reino Unido). **Nemotron:** esos datos, más el relato de una persona de [Nemotron-Personas-UK](https://huggingface.co/datasets/nvidia/Nemotron-Personas-UK) emparejada por edad, sexo y educación |
 | Pantallas | Las del archivo de Qualtrics original (`.qsf`), textuales |
 | Exclusiones | Las del original: quien falla el quiz de comprensión 6 veces queda afuera |
-| Análisis | [`docs/plan_de_analisis.md`](docs/plan_de_analisis.md), escrito antes de correr |
+| Análisis | [`docs/plan_de_analisis.md`](docs/plan_de_analisis.md), escrito antes de correr. Aparte, análisis exploratorios agregados después (`hotcold.exploratory`) |
 
 Para ver cómo funciona por dentro, [`docs/flujo_completo.md`](docs/flujo_completo.md) sigue a un agente real de principio a fin: su Persona, cada pantalla, el formulario que llena, lo que se guarda y cómo entra al análisis. Para verlo en vivo con cualquier agente: `uv run python -m hotcold.trace baseline_19 --step` (gratis con el modelo simulado; `--model …` para uno real, `--pdb` para frenar en el debugger antes de cada pedido).
 
@@ -46,12 +58,10 @@ Hace falta [uv](https://docs.astral.sh/uv/) y Python 3.13.
 
 ### 2. Datos
 
-**Paquete de replicación del paper.** El código lo espera en `../Bibliography/hot_and_cold_data/replication package/`. Usa:
+**Paquete de replicación del paper.** No se redistribuye acá: es de los autores, que lo publican con el paper bajo licencia CC BY 4.0. Hay que indicar dónde está con la variable `HOTCOLD_PACKAGE` (en `.env` o en la terminal). Si no se define, el código lo busca en `../Bibliography/hot_and_cold_data/replication package/`. Usa:
 - `qualtrics/Baseline-SM/Baseline-second.qsf`;
 - `data/HotCold-baseline-SM.xlsx`;
 - `data/hotcold_dataset.csv`.
-
-La ruta se define en `hotcold/materials.py` (`PACKAGE`).
 
 **Nemotron-Personas-UK** (público, sin cuenta), para la Persona de Nemotron:
 
@@ -62,7 +72,7 @@ curl -sL -o data/external/nemotron_uk/train-00000-of-00007.parquet https://huggi
 
 ### 3. Claves
 
-Las claves de API van en `hotcold_llm/.env`, que no se sube a git:
+Las claves de API van en un archivo `.env` en la raíz del repositorio, que no se sube a git (hay una plantilla en `.env.example`):
 
 ```
 ANTHROPIC_API_KEY=...
@@ -134,7 +144,7 @@ Sondeo de conocimiento: dos preguntas por modelo, fuera del personaje y cada una
 uv run python -m hotcold.probe_knowledge --out runs/<lote>/knowledge_probe.csv
 ```
 
-**Archivo de resultados.** `runs/` no se sube a git. La carpeta del lote definitivo se archiva entera (OSF o Zenodo), con un enlace en la tesis.
+**Archivo de resultados.** `runs/` no se sube a git porque guarda cada conversación y es grande. De la corrida definitiva se publican acá las tablas y los gráficos agregados (`resultados/`).
 
 ### 6. Analizar
 
@@ -143,6 +153,31 @@ uv run python -m hotcold.analysis runs/<lote>
 ```
 
 Escribe `runs/<lote>/analysis/` con `results.md`, las tablas en CSV y el gráfico.
+
+Análisis exploratorios, agregados desde el 2026-11-08, **después** de la corrida definitiva y fuera del plan de análisis. Casi todos se leen como descripción; los únicos tests son los del paper, repetidos con los agentes (ver abajo):
+
+```bash
+uv run python -m hotcold.exploratory runs/<lote>
+```
+
+Escribe `exploratory.md`, `xtable1.csv`–`xtable11.csv`, `xtable8_numbers.csv`, `fig_overview.png`, `fig_rounds.png`, `fig_personas.png` y `fig_paper_fig2.png` en la misma carpeta. Las tablas son:
+- un resumen por modelo y Persona: nivel de reciprocidad, distancia a los mismos humanos, Hot − Cold, Alta − Baja, cambio entre la ronda 1 y las 19–20, y cuánto cambia de decisión;
+- el cuestionario final contra los humanos: si pensó en lo que elegiría el otro, sorpresa, tentación, complejidad y las dos preguntas de reciprocidad;
+- la sorpresa por tratamiento, que es el mecanismo del paper;
+- si lo que el agente dice al final coincide con lo que hizo;
+- las diferencias por género, edad y educación;
+- de dónde vienen las diferencias entre agentes y si cada agente se parece a su persona real;
+- la reacción a lo que eligió el participante tipo 1 en la ronda anterior;
+- **el test formal de la hipótesis de sorpresa del paper** (Sección 4.1, agregado el 2026-11-09):
+  - la Tabla 2 con cada modelo, con valores p y un veredicto sobre cada parte de la hipótesis: (a) Hot > Cold, y (b) brecha mayor en Low;
+  - las otras ventanas de rondas, y la diferencia con los humanos emparejados;
+  - el chequeo de manipulación de la Tabla D.1: si la tasa de confianza baja sorprende más.
+
+  Sigue `tab2.do` y `tabD1.do` del paquete de replicación. Con los humanos reproduce los valores p del texto del paper (0,037, 0,030, 0,289 y 0,275); hay un test que lo controla. La regresión es la de la tabla 5 de `results.md`, que sí estaba en el plan. Los valores p, los veredictos y la comparación con humanos se agregaron después de ver los datos. Para los agentes de un modelo, un valor p no es evidencia sobre personas.
+- **los humanos contra el modelo promedio con cada Persona** (agregado el 2026-11-10), con su gráfico `fig_personas.png`: % de devolver en cada tratamiento para los 396 humanos, el promedio de los modelos con la Persona demográfica y el promedio con Nemotron.
+  - Cada modelo pesa lo mismo, y se muestran también el modelo más bajo y el más alto.
+  - Solo entran los modelos con al menos 30 agentes en cada celda con las dos Personas. Eso deja afuera a gpt-5-nano, que casi no tiene agentes en Hot: si entrara, subiría solo el promedio de Cold.
+  - `fig_paper_fig2.png` rehace la Fig. 2 del paper (Baseline) con el método, los colores y el estilo de `fig2.do`. En cada tratamiento agrega dos barras: el promedio con la Persona demográfica (verde) y con Nemotron (magenta). Esos dos colores identifican a cada Persona en todos los gráficos.
 
 ## Qué produce cada corrida
 
@@ -245,10 +280,30 @@ hotcold/
   manifest.py        versiones de código, datos y librerías
   audit_inputs.py    auditoría de todo lo que se manda a los agentes
   analysis.py        tablas, gráfico y validación con la Tabla 2 del paper
+  exploratory.py     análisis exploratorios agregados después de la corrida (no están en el plan)
   probe_knowledge.py pregunta a cada modelo, fuera del personaje, si conoce el paper
   trace.py           sigue a un solo agente en la terminal, pedido por pedido (gratis con el modelo simulado)
   compare.py, twin_trust.py, make_twin_narratives.py, personas_rich.yaml   solo pilotos
 tests/               tests sin llamadas a modelos
 docs/                flujo de un agente, plan de análisis, pilotos, revisión, auditoría del input, ejemplos
 data/derived/        textos derivados usados en los pilotos (Twin-2K-500)
+resultados/          tablas y gráficos agregados de la corrida definitiva
 ```
+
+## Autoría y cita
+
+Santiago Lares Harbin. Tesis de Licenciatura en Economía, Facultad de Ciencias Económicas, Universidad de Buenos Aires (2026). Tutora: Dra. Viktoriya Semeshenko.
+
+El experimento original, sus pantallas y los datos de los participantes son de sus autores:
+
+> Ghidoni, R., Suetens, S. y Yang, J. (2026). Hot–cold reciprocation gaps. *Experimental Economics*. https://doi.org/10.1017/eec.2026.10059
+
+## Datos de terceros
+
+- **Paquete de replicación del paper** (pantallas de Qualtrics y datos de los participantes): CC BY 4.0, de Ghidoni, Suetens y Yang. Los ejemplos de `docs/` citan textualmente sus pantallas.
+- **[Nemotron-Personas-UK](https://huggingface.co/datasets/nvidia/Nemotron-Personas-UK)** (NVIDIA): CC BY 4.0. Los ejemplos de `docs/` incluyen el texto de algunas de sus personas sintéticas.
+- **[Twin-2K-500](https://huggingface.co/datasets/LLM-Digital-Twin/Twin-2K-500)** (Toubia et al., 2025): CC BY 4.0. `data/derived/twin_narratives.yaml` son relatos generados a partir de ese dataset, usados solo en los pilotos.
+
+## Licencia
+
+El código es de uso libre bajo la [licencia MIT](LICENSE). Los datos de terceros conservan sus propias licencias, indicadas arriba.

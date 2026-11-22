@@ -1,0 +1,9 @@
+model,participants in both,demographic %,nemotron %,paired humans %
+DeepSeek-V4-Flash-0731,396,32,46,41
+Llama-4-Scout-17B-16E-Instruct,396,18,35,41
+Qwen3-235B-A22B-Instruct-2507,396,0,7,41
+Qwen3.8-Flash,396,4,11,41
+claude-haiku-5-5,392,4,24,41
+gemma-4-31B-it-turbo,396,12,59,41
+gpt-5-nano,188,100,99,39
+gpt-oss-120b,396,71,59,41

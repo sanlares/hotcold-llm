@@ -1,0 +1,9 @@
+source,agents per cell (HL/CL/HH/CH),gap Low (pp),gap High (pp),gap Low − gap High (pp),verdict
+DeepSeek-V4-Flash-0731 · nemotron (gender F/M only),53/94/93/96,"-2 [-17, +14]","+2 [-13, +15]","-3 [-25, +17]",cannot tell
+Llama-4-Scout-17B-16E-Instruct · nemotron (gender F/M only),53/94/93/96,"+26 [+11, +41]","+7 [-1, +16]","+19 [+1, +36]",as in the paper: Hot > Cold in Low
+Qwen3-235B-A22B-Instruct-2507 · nemotron (gender F/M only),53/94/93/96,"-5 [-12, +3]","-1 [-8, +6]","-4 [-13, +7]",cannot tell
+Qwen3.8-Flash · nemotron (gender F/M only),53/94/93/96,"-10 [-19, -1]","-9 [-17, -1]","-1 [-13, +11]",against the paper: Cold > Hot in Low
+claude-haiku-5-5 · nemotron (gender F/M only),52/94/92/96,"+2 [-12, +15]","+5 [-7, +18]","-3 [-23, +15]",cannot tell
+gemma-4-31B-it-turbo · nemotron (gender F/M only),53/94/93/96,"+1 [-15, +16]","+0 [-14, +16]","+1 [-20, +22]",cannot tell
+gpt-5-nano · nemotron (gender F/M only),2/92/2/94,"+0 [+0, +0]","+0 [+0, +0]","+0 [+0, +0]",no variation (always LEFT)
+gpt-oss-120b · nemotron (gender F/M only),53/94/93/96,"-45 [-59, -30]","-18 [-33, -5]","-27 [-47, -6]",against the paper: Cold > Hot in Low

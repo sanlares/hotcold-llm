@@ -1,0 +1,18 @@
+source,Hot-Low Yes %,Cold-Low Yes %,Hot-High Yes %,Cold-High Yes %,Hot: Low − High (pp)
+humans (all),36,28,21,12,+15
+DeepSeek-V4-Flash-0731 · demographic,20,21,1,4,+19
+DeepSeek-V4-Flash-0731 · nemotron,16,19,5,1,+11
+Llama-4-Scout-17B-16E-Instruct · demographic,0,0,0,0,+0
+Llama-4-Scout-17B-16E-Instruct · nemotron,0,0,0,0,+0
+Qwen3-235B-A22B-Instruct-2507 · demographic,42,33,0,0,+42
+Qwen3-235B-A22B-Instruct-2507 · nemotron,36,20,0,0,+36
+Qwen3.8-Flash · demographic,13,12,1,4,+12
+Qwen3.8-Flash · nemotron,17,6,0,0,+17
+claude-haiku-5-5 · demographic,13,2,1,0,+12
+claude-haiku-5-5 · nemotron,7,2,3,2,+4
+gemma-4-31B-it-turbo · demographic,0,0,0,0,+0
+gemma-4-31B-it-turbo · nemotron,0,0,0,0,+0
+gpt-5-nano · demographic,—,0,—,0,—
+gpt-5-nano · nemotron,—,0,—,0,—
+gpt-oss-120b · demographic,0,0,0,0,+0
+gpt-oss-120b · nemotron,0,0,0,0,+0

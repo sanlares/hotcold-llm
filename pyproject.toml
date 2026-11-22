@@ -1,6 +1,8 @@
 [project]
 name = "hotcold-llm"
 version = "0.1.0"
+description = "Réplica con agentes LLM del experimento Baseline de Ghidoni, Suetens y Yang (2026), Hot-cold reciprocation gaps"
+readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "langchain>=1.4.9",

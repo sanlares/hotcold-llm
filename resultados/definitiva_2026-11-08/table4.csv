@@ -1,0 +1,67 @@
+source,mode,1-5,6-10,11-15,16-20
+humans (all),Hot,48.0,44.0,44.0,45.0
+humans (all),Cold,44.0,39.0,37.0,35.0
+DeepSeek-V4-Flash-0731 · demographic,Hot,43.0,42.0,41.0,43.0
+DeepSeek-V4-Flash-0731 · demographic,Cold,29.0,27.0,26.0,26.0
+DeepSeek-V4-Flash-0731 · demographic · paired humans,Hot,48.0,44.0,44.0,45.0
+DeepSeek-V4-Flash-0731 · demographic · paired humans,Cold,44.0,39.0,37.0,35.0
+DeepSeek-V4-Flash-0731 · nemotron,Hot,45.0,49.0,48.0,46.0
+DeepSeek-V4-Flash-0731 · nemotron,Cold,45.0,45.0,45.0,45.0
+DeepSeek-V4-Flash-0731 · nemotron · paired humans,Hot,48.0,44.0,44.0,45.0
+DeepSeek-V4-Flash-0731 · nemotron · paired humans,Cold,44.0,39.0,37.0,35.0
+Llama-4-Scout-17B-16E-Instruct · demographic,Hot,36.0,40.0,49.0,46.0
+Llama-4-Scout-17B-16E-Instruct · demographic,Cold,6.0,6.0,6.0,6.0
+Llama-4-Scout-17B-16E-Instruct · demographic · paired humans,Hot,48.0,44.0,44.0,45.0
+Llama-4-Scout-17B-16E-Instruct · demographic · paired humans,Cold,44.0,39.0,37.0,35.0
+Llama-4-Scout-17B-16E-Instruct · nemotron,Hot,38.0,44.0,48.0,46.0
+Llama-4-Scout-17B-16E-Instruct · nemotron,Cold,29.0,32.0,30.0,31.0
+Llama-4-Scout-17B-16E-Instruct · nemotron · paired humans,Hot,48.0,44.0,44.0,45.0
+Llama-4-Scout-17B-16E-Instruct · nemotron · paired humans,Cold,44.0,39.0,37.0,35.0
+Qwen3-235B-A22B-Instruct-2507 · demographic,Hot,0.0,0.0,0.0,0.0
+Qwen3-235B-A22B-Instruct-2507 · demographic,Cold,0.0,0.0,0.0,0.0
+Qwen3-235B-A22B-Instruct-2507 · demographic · paired humans,Hot,48.0,44.0,44.0,45.0
+Qwen3-235B-A22B-Instruct-2507 · demographic · paired humans,Cold,44.0,39.0,37.0,35.0
+Qwen3-235B-A22B-Instruct-2507 · nemotron,Hot,7.0,6.0,7.0,6.0
+Qwen3-235B-A22B-Instruct-2507 · nemotron,Cold,7.0,7.0,7.0,7.0
+Qwen3-235B-A22B-Instruct-2507 · nemotron · paired humans,Hot,48.0,44.0,44.0,45.0
+Qwen3-235B-A22B-Instruct-2507 · nemotron · paired humans,Cold,44.0,39.0,37.0,35.0
+Qwen3.8-Flash · demographic,Hot,5.0,4.0,4.0,4.0
+Qwen3.8-Flash · demographic,Cold,4.0,4.0,4.0,4.0
+Qwen3.8-Flash · demographic · paired humans,Hot,48.0,44.0,44.0,45.0
+Qwen3.8-Flash · demographic · paired humans,Cold,44.0,39.0,37.0,35.0
+Qwen3.8-Flash · nemotron,Hot,5.0,4.0,4.0,4.0
+Qwen3.8-Flash · nemotron,Cold,14.0,14.0,14.0,14.0
+Qwen3.8-Flash · nemotron · paired humans,Hot,48.0,44.0,44.0,45.0
+Qwen3.8-Flash · nemotron · paired humans,Cold,44.0,39.0,37.0,35.0
+claude-haiku-5-5 · demographic,Hot,3.0,4.0,4.0,5.0
+claude-haiku-5-5 · demographic,Cold,3.0,4.0,4.0,4.0
+claude-haiku-5-5 · demographic · paired humans,Hot,48.0,44.0,44.0,45.0
+claude-haiku-5-5 · demographic · paired humans,Cold,44.0,39.0,37.0,35.0
+claude-haiku-5-5 · nemotron,Hot,26.0,30.0,31.0,29.0
+claude-haiku-5-5 · nemotron,Cold,17.0,23.0,23.0,23.0
+claude-haiku-5-5 · nemotron · paired humans,Hot,48.0,44.0,44.0,46.0
+claude-haiku-5-5 · nemotron · paired humans,Cold,44.0,39.0,37.0,35.0
+gemma-4-31B-it-turbo · demographic,Hot,5.0,4.0,4.0,5.0
+gemma-4-31B-it-turbo · demographic,Cold,16.0,16.0,16.0,16.0
+gemma-4-31B-it-turbo · demographic · paired humans,Hot,48.0,44.0,44.0,45.0
+gemma-4-31B-it-turbo · demographic · paired humans,Cold,44.0,39.0,37.0,35.0
+gemma-4-31B-it-turbo · nemotron,Hot,60.0,61.0,60.0,61.0
+gemma-4-31B-it-turbo · nemotron,Cold,58.0,58.0,58.0,58.0
+gemma-4-31B-it-turbo · nemotron · paired humans,Hot,48.0,44.0,44.0,45.0
+gemma-4-31B-it-turbo · nemotron · paired humans,Cold,44.0,39.0,37.0,35.0
+gpt-5-nano · demographic,Hot,100.0,100.0,100.0,100.0
+gpt-5-nano · demographic,Cold,99.0,99.0,100.0,100.0
+gpt-5-nano · demographic · paired humans,Hot,44.0,25.0,43.0,29.0
+gpt-5-nano · demographic · paired humans,Cold,45.0,39.0,38.0,35.0
+gpt-5-nano · nemotron,Hot,100.0,100.0,100.0,100.0
+gpt-5-nano · nemotron,Cold,96.0,99.0,100.0,100.0
+gpt-5-nano · nemotron · paired humans,Hot,65.0,83.0,62.0,70.0
+gpt-5-nano · nemotron · paired humans,Cold,45.0,39.0,37.0,35.0
+gpt-oss-120b · demographic,Hot,45.0,48.0,57.0,63.0
+gpt-oss-120b · demographic,Cold,73.0,75.0,84.0,87.0
+gpt-oss-120b · demographic · paired humans,Hot,48.0,44.0,44.0,45.0
+gpt-oss-120b · demographic · paired humans,Cold,44.0,39.0,37.0,35.0
+gpt-oss-120b · nemotron,Hot,44.0,45.0,49.0,47.0
+gpt-oss-120b · nemotron,Cold,58.0,64.0,69.0,72.0
+gpt-oss-120b · nemotron · paired humans,Hot,48.0,44.0,44.0,45.0
+gpt-oss-120b · nemotron · paired humans,Cold,44.0,39.0,37.0,35.0

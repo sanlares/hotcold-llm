@@ -10,13 +10,15 @@ from __future__ import annotations
 
 import html
 import json
+import os
 import re
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PACKAGE = ROOT / "Bibliography/hot_and_cold_data/replication package"
+# The authors' replication package (not redistributed here). Set HOTCOLD_PACKAGE to point to your copy.
+PACKAGE = Path(os.environ.get("HOTCOLD_PACKAGE") or ROOT / "Bibliography/hot_and_cold_data/replication package")
 QSF = {"baseline": PACKAGE / "qualtrics/Baseline-SM/Baseline-second.qsf"}
 
 N_ROUNDS = 20

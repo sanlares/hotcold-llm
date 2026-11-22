@@ -1,0 +1,18 @@
+source,agents,thought about type-1's choice: Yes %,surprised by IN (Hot): Yes %,… Yes or a little %,"tempted to choose RIGHT, mean 0–7","complexity, mean 0–10","'I return favours', mean 0–10","gift to a helpful stranger, mean £"
+humans (all),396,28,29,67,5.1,3.6,7.8,16.0
+DeepSeek-V4-Flash-0731 · demographic,396,53,11,30,4.7,2.6,7.8,17.6
+DeepSeek-V4-Flash-0731 · nemotron,396,41,10,30,4.1,2.8,8.0,18.3
+Llama-4-Scout-17B-16E-Instruct · demographic,396,0,0,63,4.9,5.0,7.3,5.7
+Llama-4-Scout-17B-16E-Instruct · nemotron,396,0,0,83,4.5,5.0,7.5,6.2
+Qwen3-235B-A22B-Instruct-2507 · demographic,396,80,21,25,7.0,3.6,6.4,16.6
+Qwen3-235B-A22B-Instruct-2507 · nemotron,396,80,18,28,6.7,3.7,6.7,17.3
+Qwen3.8-Flash · demographic,396,32,7,15,5.8,2.1,7.1,13.7
+Qwen3.8-Flash · nemotron,396,41,8,25,5.0,2.2,7.7,18.9
+claude-haiku-5-5 · demographic,396,2,7,93,3.6,4.6,7.1,10.0
+claude-haiku-5-5 · nemotron,392,2,5,90,3.5,4.2,7.2,10.0
+gemma-4-31B-it-turbo · demographic,396,26,0,29,6.1,1.1,8.1,20.0
+gemma-4-31B-it-turbo · nemotron,396,32,0,38,4.0,1.3,8.2,19.8
+gpt-5-nano · demographic,196,56,—,—,0.0,4.2,5.8,0.0
+gpt-5-nano · nemotron,197,38,—,—,0.0,3.8,6.6,0.0
+gpt-oss-120b · demographic,396,32,0,10,2.6,3.7,7.9,12.1
+gpt-oss-120b · nemotron,396,63,0,8,3.8,3.7,7.9,12.2

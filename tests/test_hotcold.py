@@ -406,3 +406,83 @@ def test_spend_limit_stops_the_run_instead_of_flagging_agents():
     from hotcold.llm import is_fatal
     msg = "Error code: 429 - Your organization has reached its configured enforced spend limit."
     assert is_fatal(Exception(msg)) and not is_fatal(Exception("Error code: 429 - Rate limit reached"))
+
+
+def test_exploratory_parsing_and_measures():
+    from hotcold.exploratory import history_table, pounds, scale, switch_rate
+    assert scale("0 (Not at all tempted)") == 0 and scale(7) == 7 and scale("10 (describe me perfectly)") == 10
+    assert pounds("No present") == 0 and pounds("The present worth 15 Pounds") == 15
+    d = pd.DataFrame({"agent_id": ["a"] * 4 + ["b"] * 2, "round": [1, 2, 3, 4, 1, 2], "reci": [1, 0, 0, 1, 1, 1]})
+    assert switch_rate(d) == 2 / 4  # a changes twice in 3 pairs, b never in 1
+    # 40 Cold agents; type-1 chooses IN in odd rounds, OUT in even ones; the agent chooses LEFT only after an OUT
+    rows = [{"source": "x", "agent_id": f"g{i}", "round": r, "hot": 0, "p1trust": r % 2,
+             "reci": float(r % 2 == 1 and r > 1)} for i in range(40) for r in range(1, 21)]
+    t = history_table(pd.DataFrame(rows)).iloc[0]
+    assert t["Cold: after IN %"] == "0" and t["Cold: after OUT %"] == "100" and t["Hot: after IN %"] == "—"
+
+
+def test_exploratory_runs_on_a_scripted_run(personas, tmp_path):
+    from hotcold.exploratory import explore
+    from hotcold.personas import demographic_personas
+    from hotcold.run import prepare_run, save
+    ps = demographic_personas(personas[:12])
+    out = tmp_path / "run"
+    prepare_run(out, {"model": "scripted", "persona": "demographic"}, ps)
+    _run_agents(ps, lambda: ScriptedModel(), out)
+    save(out, ps)
+    text = explore([out], tmp_path / "analysis")
+    assert all(f"## X{i}." in text for i in range(1, 12)) and (tmp_path / "analysis" / "fig_overview.png").exists()
+    assert "a cell under 30 agents" in text  # 12 agents: the formal test is not run
+
+
+def test_persona_average_weighs_models_equally_and_drops_thin_ones():
+    from hotcold.analysis import CELLS
+    from hotcold.exploratory import HUMANS, averaged_models, persona_average_table
+    rows = []
+
+    def add(model, persona, cell, n, value):
+        src = HUMANS if model is None else f"{model} · {persona}"
+        rows.extend({"source": src, "model": model, "persona": persona, "treat": cell, "agent_id": f"{src}{cell}{i}",
+                     "real_id": i, "round": r, "reci": value, "hot": int(cell.startswith("Hot"))}
+                    for i in range(n) for r in (1, 19, 20))
+    for c in CELLS:
+        add(None, None, c, 40, 0.5)
+        for p in ("demographic", "nemotron"):
+            add("a", p, c, 40, 1.0)
+            add("b", p, c, 30, 0.0)
+            add("thin", p, c, 300 if c.startswith("Cold") else 2, 0.0)  # almost no agents in Hot, like gpt-5-nano
+    allp = pd.DataFrame(rows)
+    assert averaged_models(allp) == ["a", "b"]
+    t = persona_average_table(allp)
+    row = t[(t.window == "rounds 1-20") & t.group.str.startswith("demographic")].iloc[0]
+    assert row["Cold-Low"] == "50 (0–100)"  # 40 agents at 100% and 30 at 0%: 50, not the pooled 57
+
+
+def test_paper_figure2_bars_are_cell_rates_with_statas_interval():
+    """fig2.do: reg reci i.treat + margins. Round 1 (classical): rate ± t(n−4) · s/√n_cell; read off the paper's Fig. 2,
+    rounds 19-20: Hot-Low ≈ .49 [.35, .63], Cold-Low ≈ .29 [.21, .37]."""
+    from hotcold.analysis import decisions, humans
+    from hotcold.exploratory import cell_margins, t_crit
+    assert abs(t_crit(10) - 2.2281) < 1e-3 and abs(t_crit(1e9) - 1.95996) < 1e-4
+    d = decisions(humans(), "round 1")
+    m = cell_margins(d, cluster=False)
+    means = d.groupby("treat").reci.mean()
+    s2 = ((d.reci - d.treat.map(means)) ** 2).sum() / (len(d) - 4)
+    for c, x in d.groupby("treat"):
+        assert abs(m.loc[c, "rate"] - means[c]) < 1e-12
+        assert abs(m.loc[c, "hi"] - means[c] - t_crit(len(d) - 4) * (s2 / len(x)) ** 0.5) < 1e-9
+    late = cell_margins(decisions(humans(), "rounds 19-20"), cluster=True).round(2)
+    assert late.loc["Hot-Low"].tolist() == [0.49, 0.35, 0.63] and late.loc["Cold-Low"].tolist() == [0.29, 0.21, 0.37]
+
+
+def test_formal_surprise_test_reproduces_the_paper():
+    """Sec. 4.1: Hot 0.103 (P = 0.037); Hot in Low 0.177 (P = 0.030), in High 0.065 (P = 0.289); Hot×High P = 0.275."""
+    from hotcold.analysis import decisions, humans
+    from hotcold.exploratory import t_pvalue, table2
+    assert abs(t_pvalue(2.228139, 10) - 0.05) < 1e-5 and abs(t_pvalue(1.959964, 1e9) - 0.05) < 1e-5
+    assert t_pvalue(0, 30) == 1 and t_pvalue(float("inf"), 30) == 0
+    est, n = table2(decisions(humans(), "rounds 19-20"), cluster=True)
+    assert n == 579
+    paper = {"Hot": (0.103, 0.037), "Hot in Low": (0.177, 0.030), "Hot in High": (0.065, 0.289), "Hot×High": (-0.112, 0.275)}
+    for k, (b, p) in paper.items():
+        assert abs(est[k][0] - b) < 0.0015 and abs(est[k][2] - p) < 0.0015, k
